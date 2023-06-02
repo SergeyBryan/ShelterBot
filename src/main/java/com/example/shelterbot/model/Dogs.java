@@ -4,22 +4,22 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import org.hibernate.annotations.Cascade;
 
 @Entity
-@Table(name = "cats_shelter")
+@Table(name = "dogs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CatsShelter {
+public class Dogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private int age;
 
-    @OneToMany(mappedBy = "shelter",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Cats> cats;
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JoinColumn(name = "shelter")
+    private DogsShelter shelter;
 }

@@ -1,13 +1,25 @@
 package com.example.shelterbot.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 @Entity
+@Table(name = "cats")
+@Data
 @NoArgsConstructor
-public class Cats extends Pet{
+@AllArgsConstructor
+public class Cats  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private int age;
 
-    public Cats(Long id, String name, int age, Shelter shelter) {
-        super(id, name, age, shelter);
-    }
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JoinColumn(name = "shelter")
+    private CatsShelter shelter;
 }
