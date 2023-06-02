@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 @Entity
-@Table(name = "pets")
+@Table(name = "dogs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +20,6 @@ public class Dogs {
 
     @ManyToOne
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "dogs")
+    @JoinColumn(name = "shelter")
     private DogsShelter shelter;
 }
