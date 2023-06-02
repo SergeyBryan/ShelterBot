@@ -1,14 +1,27 @@
 package com.example.shelterbot.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@Table(name = "cats_shelter")
+@Data
 @NoArgsConstructor
-public class CatsShelter extends Shelter{
-    public CatsShelter(Long id, String name, int age, List<Pet> pet) {
-        super(id, name, age, pet);
-    }
+@AllArgsConstructor
+public class CatsShelter {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private int age;
+
+    @OneToMany(mappedBy = "shelter",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Cats> cats;
 }

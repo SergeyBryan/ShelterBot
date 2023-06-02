@@ -11,7 +11,7 @@ import org.hibernate.annotations.Cascade;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cats  {
+public class Dogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,6 @@ public class Cats  {
 
     @ManyToOne
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "cats")
-    private CatsShelter shelter;
+    @JoinColumn(name = "dogs")
+    private DogsShelter shelter;
 }
