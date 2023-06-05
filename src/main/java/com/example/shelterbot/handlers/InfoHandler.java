@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * В этом хендлере находится каждый пункт основного меню и обработка кнопки "Назад"
- * Работоспособность каждого пункта меню сделана через CASE SWITCH.
+ * Обработчик запросов на получение информации о приюте для Telegram-бота приюта для кошек.
+ * Обрабатывает запросы на получение информации о приюте, инструкции по взятию животного из приюта,
+ * отправку отчета о питомце и вызов волонтера.
  */
 
 @Component
@@ -28,11 +29,24 @@ public class InfoHandler extends AbstractHandler {
     List<String> menuList = (List.of(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER));
     MenuHandler secondStepHandler;
 
+    /**
+     * Конструктор класса InfoHandler.
+     *
+     * @param telegramBot     экземпляр TelegramBot для отправки сообщений
+     * @param shelterMessage  экземпляр ShelterMessageImpl для формирования сообщений
+     * @param menuHandler     экземпляр MenuHandler для обработки запросов на возврат к меню
+     */
     public InfoHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, MenuHandler menuHandler) {
         super(telegramBot, shelterMessage);
         this.secondStepHandler = menuHandler;
     }
 
+    /**
+     * Проверяет, применим ли данный обработчик к данному обновлению.
+     *
+     * @param update  обновление, которое нужно обработать
+     * @return true, если обработчик применим, иначе false
+     */
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
@@ -44,6 +58,11 @@ public class InfoHandler extends AbstractHandler {
         return false;
     }
 
+    /**
+     * Обрабатывает обновление, отправляя пользователю запрошенную информацию.
+     *
+     * @param update  обновление, которое нужно обработать
+     */
     @Override
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();

@@ -9,10 +9,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- *Здесь находится основное меню.
+ * Обработчик меню для Telegram-бота приюта для кошек.
+ * Обрабатывает запросы на получение информации о приюте, инструкции по взятию животного из приюта,
+ * отправку отчета о питомце и вызов волонтера.
  */
-
-
 @Component
 @ToString
 @Order
@@ -24,10 +24,23 @@ public class MenuHandler extends AbstractHandler {
     final String CALL_A_VOLUNTEER = "Позвать волонтера";
     String MENU = "Выберите Ваш запрос в меню";
 
+    /**
+     * Конструктор класса MenuHandler.
+     *
+     * @param telegramBot    экземпляр TelegramBot для отправки сообщений
+     * @param shelterMessage экземпляр ShelterMessageImpl для формирования сообщений
+     */
     public MenuHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
         super(telegramBot, shelterMessage);
     }
 
+
+    /**
+     * Проверяет, применим ли данный обработчик к данному обновлению.
+     *
+     * @param update обновление, которое нужно обработать
+     * @return true, если обработчик применим, иначе false
+     */
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
@@ -37,7 +50,11 @@ public class MenuHandler extends AbstractHandler {
         }
     }
 
-
+    /**
+     * Обрабатывает обновление, отправляя пользователю кнопки меню.
+     *
+     * @param update обновление, которое нужно обработать
+     */
     @Override
     public void handleUpdate(Update update) {
         InlineKeyboardMarkup keyboardMarkup = shelterMessage.keyboards(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER);
@@ -50,6 +67,3 @@ public class MenuHandler extends AbstractHandler {
         }
     }
 }
-
-
-
