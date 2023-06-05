@@ -1,6 +1,6 @@
-package com.example.shelterbot;
+package com.example.shelterbot.model.enums;
 
-public enum Dog {
+public enum DogsInfo {
         GREETING("Бот приветствует пользователя."),
         DATING_RULES("Бот может выдать правила знакомства с животным до того, как забрать его из приюта."),
         LIST_OF_DOCUMENTS("Бот может выдать список документов, необходимых для того, чтобы взять животное из приюта."),
@@ -15,11 +15,11 @@ public enum Dog {
         CALL_A_VOLUNTEER("Если бот не может ответить на вопросы клиента, то можно позвать волонтера.");
         private String infoDog;
 
-        Dog(String infoDog) {
+        DogsInfo(String infoDog) {
         }
 
         public String toString() {
-                return "Dog{" +
+                return "DogsInfo{" +
                         "infoDog='" + infoDog + '\'' +
                         '}';
         }
