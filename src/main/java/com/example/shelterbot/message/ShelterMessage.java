@@ -7,11 +7,7 @@ public interface ShelterMessage {
 
     InlineKeyboardMarkup keyboards(String keyboardText);
 
-    InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText);
-
-    InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText, String thirdKeyboardText);
-
-    InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText, String thirdKeyboardText, String fourthKeyboard);
+    InlineKeyboardMarkup keyboards(String... secondKeyboardText);
 
     void sendMessage(long id, TelegramBot telegramBot, String message);
 
