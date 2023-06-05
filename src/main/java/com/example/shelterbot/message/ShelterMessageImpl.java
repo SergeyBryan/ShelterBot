@@ -6,7 +6,18 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
+
+/**
+ * Методы для создания кнопок и сообщений для TelegramBot.
+ * метод keyboards возможен для использования в двух аргументах:
+ * Передавая в аргументы строку, для создания одной кнопки
+ * Передавая в аргументы массив строк, создавая больше одной кнопки
+ * Метод sendMessage используется для отправки сообщений ботом
+ * Метод sendButtonMessage используется для отправки сообщений ботом с кнопкой
+ */
+@Service
 public class ShelterMessageImpl implements ShelterMessage {
 
     Logger LOGGER;
@@ -16,28 +27,12 @@ public class ShelterMessageImpl implements ShelterMessage {
         return keyboardMarkup.addRow(new InlineKeyboardButton(keyboardText).callbackData("/" + keyboardText));
     }
 
-    public InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText) {
+    public InlineKeyboardMarkup keyboards(String... keyboardText) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        return keyboardMarkup.addRow(
-                new InlineKeyboardButton(firstKeyboardText).callbackData("/" + firstKeyboardText),
-                new InlineKeyboardButton(secondKeyboardText).callbackData("/" + secondKeyboardText));
-    }
-
-    public InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText, String thirdKeyboardText) {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        return keyboardMarkup.addRow(
-                new InlineKeyboardButton(firstKeyboardText).callbackData("/" + firstKeyboardText),
-                new InlineKeyboardButton(secondKeyboardText).callbackData("/" + secondKeyboardText),
-                new InlineKeyboardButton(thirdKeyboardText).callbackData("/" + thirdKeyboardText));
-    }
-
-    public InlineKeyboardMarkup keyboards(String firstKeyboardText, String secondKeyboardText, String thirdKeyboardText, String fourthKeyboard) {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        return keyboardMarkup.addRow(
-                new InlineKeyboardButton(firstKeyboardText).callbackData("/" + firstKeyboardText),
-                new InlineKeyboardButton(secondKeyboardText).callbackData("/" + secondKeyboardText),
-                new InlineKeyboardButton(thirdKeyboardText).callbackData("/" + thirdKeyboardText),
-                new InlineKeyboardButton(fourthKeyboard).callbackData("/" + fourthKeyboard));
+        for (String text : keyboardText) {
+            keyboardMarkup.addRow(new InlineKeyboardButton(text).callbackData("/" + text));
+        }
+        return keyboardMarkup;
     }
 
     public void sendMessage(long id, TelegramBot telegramBot, String message) {
