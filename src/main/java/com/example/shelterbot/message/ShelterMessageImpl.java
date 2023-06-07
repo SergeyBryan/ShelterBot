@@ -22,10 +22,12 @@ public class ShelterMessageImpl implements ShelterMessage {
 
     Logger LOGGER;
 
-    public InlineKeyboardMarkup keyboards(String keyboardText) {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        return keyboardMarkup.addRow(new InlineKeyboardButton(keyboardText).callbackData("/" + keyboardText));
-    }
+// Этот метод можно удалить т.к. в следующий метод можно передать одну строку и работа метода будет идентичной
+
+//    public InlineKeyboardMarkup keyboards(String keyboardText) {
+//        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+//        return keyboardMarkup.addRow(new InlineKeyboardButton(keyboardText).callbackData("/" + keyboardText));
+//    }
 
     public InlineKeyboardMarkup keyboards(String... keyboardText) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();

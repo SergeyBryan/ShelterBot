@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.hibernate.annotations.Comment;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  * Отправляет пользователю приветственное сообщение.
  */
 @Component
+@Order(1)
 public class StartHandler extends AbstractHandler {
 
     /**

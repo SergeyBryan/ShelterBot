@@ -4,11 +4,15 @@ import com.example.shelterbot.message.ShelterMessageImpl;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 /**
  * Обработчик по умолчанию, который применяется к любому обновлению (Update) в чате.
  * Отправляет сообщение пользователю с предложением вызвать волонтера.
  */
+@Component
+@Order
 public class DefaultHandler extends AbstractHandler {
 
     /**
