@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @ToString
-@Order
+@Order(3)
 public class InfoHandler extends AbstractHandler {
 
     final String INFO = "Узнать информацию о приюте";

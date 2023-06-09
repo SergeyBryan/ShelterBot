@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ToString
-@Order
+@Order(2)
 public class MenuHandler extends AbstractHandler {
 
     final String INFO = "Узнать информацию о приюте";
