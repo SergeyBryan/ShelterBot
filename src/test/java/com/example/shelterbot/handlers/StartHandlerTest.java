@@ -15,6 +15,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 
+import java.util.Map;
+
 class StartHandlerTest {
 
     @Mock
@@ -69,5 +71,14 @@ class StartHandlerTest {
         startHandler.handleUpdate(update);
 
         verify(telegramBot).execute(new SendMessage(chatId, "Привет " + firstName + ". Я помогу тебе выбрать приют"));
+
+//        verify(telegramBot).execute(new SendMessage(chatId, "Привет " + firstName + ". Я помогу тебе выбрать приют"));
+
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            parameters.get("chat_id").equals(chatId);
+
+            return false;
+        }));
     }
 }
