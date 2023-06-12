@@ -21,21 +21,41 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+/**
+ * Реализация интерфейса FileService для сохранения изображений
+ */
 @Service
 public class FileServiceImpl implements FileService {
 
+    /**
+     * Путь к папке, в которой будут сохраняться изображения
+     */
     @Value("${path.to.file.folder}")
     private String filePath;
 
+    /**
+     * Логгер для записи действий и ошибок в лог-файл
+     */
     private final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
+    /**
+     * Маркер для обозначения ошибок в лог-файле
+     */
     private static final Marker ERROR_MARKER = MarkerFactory.getMarker("ERROR");
 
+    /**
+     * Объект бота Telegram для получения содержимого файлов
+     */
     private final TelegramBot telegramBot;
 
     public FileServiceImpl(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
 
+    /**
+     * Метод сохранения изображения в файловую систему
+     * @param message сообщение с изображением
+     * @return путь к сохраненному изображению в файловой системе
+     */
     @Override
     public String saveImage(Message message) {
         // todo пока обрабатывается только одно фото, необходимо реальзовать возможность принимать альбом
