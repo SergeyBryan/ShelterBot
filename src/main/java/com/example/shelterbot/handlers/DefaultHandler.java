@@ -17,7 +17,8 @@ public class DefaultHandler extends AbstractHandler {
 
     /**
      * Создает экземпляр класса DefaultHandler.
-     * @param telegramBot бот, который будет обрабатывать сообщения.
+     *
+     * @param telegramBot    бот, который будет обрабатывать сообщения.
      * @param shelterMessage объект, который предоставляет методы для работы с сообщением ShelterMessage.
      */
     public DefaultHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
@@ -26,6 +27,7 @@ public class DefaultHandler extends AbstractHandler {
 
     /**
      * Проверяет, применим ли обработчик к данному обновлению в чате.
+     *
      * @param update обновление в чате.
      * @return всегда true, так как обработчик по умолчанию применим к любому обновлению.
      */
@@ -36,6 +38,7 @@ public class DefaultHandler extends AbstractHandler {
 
     /**
      * Обрабатывает обновление в чате путем отправки пользователю сообщения с предложением вызвать волонтера.
+     *
      * @param update обновление в чате.
      */
     @Override

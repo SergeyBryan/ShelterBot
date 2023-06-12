@@ -18,11 +18,6 @@ import org.springframework.stereotype.Component;
 @Order(2)
 public class MenuHandler extends AbstractHandler {
 
-    final String INFO = "Узнать информацию о приюте";
-    final String HOW_TO_TAKE_A_PET = "Как взять животное из приюта";
-    final String PET_REPORT = "Прислать отчет о питомце";
-    final String CALL_A_VOLUNTEER = "Позвать волонтера";
-    String MENU = "Выберите Ваш запрос в меню";
 
     /**
      * Конструктор класса MenuHandler.
@@ -44,10 +39,10 @@ public class MenuHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
-            return (update.callbackQuery().data().equals("/Назад"));
-        } else {
-            return update.message().text().equals("Приют для кошек");
+            return (update.callbackQuery().data().equals("/Назад")) ||
+                    (update.callbackQuery().data().equals("/" + CAT_SHELTER) || update.callbackQuery().data().equals("/" + DOG_SHELTER));
         }
+        return false;
     }
 
     /**
