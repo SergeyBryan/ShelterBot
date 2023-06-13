@@ -50,9 +50,9 @@ create table dogs
 ALTER TABLE cats_shelter
     ADD CONSTRAINT fk_cats_shelter
         FOREIGN KEY (cats)
-            REFERENCES cats_shelter (id);
+            REFERENCES cats (id);
 
 ALTER TABLE dogs_shelter
     ADD CONSTRAINT fk_dogs_shelter
         FOREIGN KEY (dogs)
-            REFERENCES dogs_shelter (id);
+            REFERENCES dogs (id);
