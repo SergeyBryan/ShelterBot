@@ -3,6 +3,7 @@ package com.example.shelterbot.handlers;
 import com.example.shelterbot.message.ShelterMessageImpl;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.hibernate.annotations.Comment;
 import org.springframework.core.annotation.Order;
@@ -18,7 +19,8 @@ public class StartHandler extends AbstractHandler {
 
     /**
      * Создает экземпляр класса StartHandler.
-     * @param telegramBot бот, который будет обрабатывать сообщения.
+     *
+     * @param telegramBot    бот, который будет обрабатывать сообщения.
      * @param shelterMessage объект, который предоставляет методы для работы с сообщением ShelterMessage.
      */
     public StartHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
@@ -27,23 +29,28 @@ public class StartHandler extends AbstractHandler {
 
     /**
      * Проверяет, применим ли обработчик к данному обновлению в чате.
+     *
      * @param update обновление в чате.
      * @return true, если текст сообщения содержит команду /start, в противном случае - false.
      */
     @Override
     public boolean appliesTo(Update update) {
-        return update.message().text() != null && update.message().text().equals("/start");
+        if (update.callbackQuery() == null) {
+            return update.message().text() != null && update.message().text().equals("/start");
+        } else {
+            return false;
+        }
     }
 
     /**
      * Обрабатывает обновление в чате путем отправки пользователю приветственного сообщения.
+     *
      * @param update обновление в чате.
      */
     @Override
     public void handleUpdate(Update update) {
-        telegramBot.execute(
-                new SendMessage(
-                        update.message().chat().id(), "Привет " + update.message().chat().firstName() + ". Я помогу тебе выбрать приют"
-                ));
+        long chatId = update.message().chat().id();
+        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Приют для кошек", "Приют для собак");
+        shelterMessage.sendButtonMessage(chatId, telegramBot, "Привет " + update.message().chat().firstName() + ". Я помогу тебе выбрать приют", inlineKeyboardMarkup);
     }
 }
