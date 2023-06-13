@@ -70,15 +70,10 @@ class StartHandlerTest {
 
         startHandler.handleUpdate(update);
 
-        verify(telegramBot).execute(new SendMessage(chatId, "Привет " + firstName + ". Я помогу тебе выбрать приют"));
-
-//        verify(telegramBot).execute(new SendMessage(chatId, "Привет " + firstName + ". Я помогу тебе выбрать приют"));
-
         verify(telegramBot).execute(argThat(argument -> {
             Map<String, Object> parameters = argument.getParameters();
-            parameters.get("chat_id").equals(chatId);
-
-            return false;
+            return parameters.get("chat_id").equals(chatId) &&
+                    parameters.get("text").equals("Привет " + firstName + ". Я помогу тебе выбрать приют");
         }));
     }
 }
