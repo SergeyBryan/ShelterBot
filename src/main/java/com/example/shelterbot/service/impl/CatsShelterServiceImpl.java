@@ -20,8 +20,7 @@ public class CatsShelterServiceImpl implements CatsShelterService {
 
     @Override
     public CatsShelter save(CatsShelter catsShelter) {
-        catsShelterRepository.save(catsShelter);
-        return catsShelter;
+        return catsShelterRepository.save(catsShelter);
     }
 
     @Override

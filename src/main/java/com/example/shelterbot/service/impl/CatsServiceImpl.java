@@ -21,8 +21,7 @@ public class CatsServiceImpl implements CatsService {
 
     @Override
     public Cats save(Cats cats) {
-        catsRepository.save(cats);
-        return cats;
+        return catsRepository.save(cats);
     }
 
     @Override

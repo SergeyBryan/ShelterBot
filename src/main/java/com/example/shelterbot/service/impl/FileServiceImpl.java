@@ -6,16 +6,12 @@ import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.response.GetFileResponse;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,14 +63,11 @@ public class FileServiceImpl implements FileService {
         File file = getFileResponse.file();
 
         String fileName = file.fileUniqueId();
-
-        java.io.File image = new java.io.File(filePath + "/" + fileName);
         Path path = Path.of(filePath, fileName);
 
-        try (FileOutputStream fos = new FileOutputStream(image)) {
-            ByteArrayInputStream bis = new ByteArrayInputStream(telegramBot.getFileContent(file));
-            Files.createFile(path);
-            IOUtils.copy(bis, fos);
+        try {
+            Files.write(path, telegramBot.getFileContent(file));
+
         } catch (IOException e) {
             logger.error(ERROR_MARKER,
                     "Ошибка при сохранении картинки от пользователя"
