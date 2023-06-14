@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Order(3)
 public class InfoHandler extends AbstractHandler {
 
-    MenuHandler menuHandler;
+    private final MenuHandler menuHandler;
 
     /**
      * Конструктор класса InfoHandler.
@@ -42,7 +42,7 @@ public class InfoHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
-            for (String text : menuList) {
+            for (String text : MENU_LIST) {
                 update.callbackQuery().data().equals("/" + text);
                 return true;
             }
@@ -59,7 +59,7 @@ public class InfoHandler extends AbstractHandler {
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();
         long chatId = update.callbackQuery().message().chat().id();
-        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Назад");
+        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards(BACK);
         if (data != null) {
             switch (data) {
                 case "/" + INFO ->
@@ -70,7 +70,7 @@ public class InfoHandler extends AbstractHandler {
                         shelterMessage.sendButtonMessage(chatId, telegramBot, "Отчёт о питомце: \n Отчёт о вашем питомце здесь:", inlineKeyboardMarkup);
                 case "/" + CALL_A_VOLUNTEER ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, "Волонтёр", inlineKeyboardMarkup);
-                case "/Назад" -> menuHandler.handleUpdate(update);
+                case "/" + BACK -> menuHandler.handleUpdate(update);
             }
         }
     }
