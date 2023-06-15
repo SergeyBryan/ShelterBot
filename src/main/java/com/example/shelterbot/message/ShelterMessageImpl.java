@@ -22,10 +22,6 @@ public class ShelterMessageImpl implements ShelterMessage {
 
     Logger LOGGER;
 
-    public InlineKeyboardMarkup keyboards(String keyboardText) {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        return keyboardMarkup.addRow(new InlineKeyboardButton(keyboardText).callbackData("/" + keyboardText));
-    }
 
     public InlineKeyboardMarkup keyboards(String... keyboardText) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();

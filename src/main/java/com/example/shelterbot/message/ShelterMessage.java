@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 
 public interface ShelterMessage {
 
-    InlineKeyboardMarkup keyboards(String keyboardText);
+//    InlineKeyboardMarkup keyboards(String keyboardText);
 
     InlineKeyboardMarkup keyboards(String... secondKeyboardText);
 
