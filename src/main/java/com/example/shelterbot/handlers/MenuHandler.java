@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ToString
 @Order(2)
-public class MenuHandler extends AbstractHandler {
+public class  MenuHandler extends AbstractHandler {
 
 
     /**

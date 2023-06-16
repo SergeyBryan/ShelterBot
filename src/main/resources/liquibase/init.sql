@@ -8,7 +8,8 @@ create table users
     name     text not null,
     chat_id   text not null unique,
     phone_num text not null,
-    address  text
+    address  text,
+    trialPeriod timestamp
 );
 
 create table volunteer
