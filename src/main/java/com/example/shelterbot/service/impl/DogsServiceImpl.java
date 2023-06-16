@@ -20,8 +20,7 @@ public class DogsServiceImpl implements DogsService {
 
     @Override
     public Dogs save(Dogs dogs) {
-        dogsRepository.save(dogs);
-        return dogs;
+        return dogsRepository.save(dogs);
     }
 
     @Override

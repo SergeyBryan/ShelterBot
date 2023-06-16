@@ -1,6 +1,8 @@
 package com.example.shelterbot.message;
 
+
 import com.example.shelterbot.listener.TelegramBotUpdatesListener;
+
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
@@ -22,7 +24,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShelterMessageImpl implements ShelterMessage {
 
+
     Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+
+
 
 
     public InlineKeyboardMarkup keyboards(String... keyboardText) {

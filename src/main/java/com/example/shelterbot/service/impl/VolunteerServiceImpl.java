@@ -20,8 +20,7 @@ public class VolunteerServiceImpl implements VolunteerService {
 
     @Override
     public Volunteer save(Volunteer volunteer) {
-        volunteerRepository.save(volunteer);
-        return volunteer;
+        return volunteerRepository.save(volunteer);
     }
 
     @Override

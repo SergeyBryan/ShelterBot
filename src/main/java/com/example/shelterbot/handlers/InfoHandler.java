@@ -65,8 +65,9 @@ public class InfoHandler extends AbstractHandler {
      */
     @Override
     public void handleUpdate(Update update) {
-        String data = update.callbackQuery().data();
+       String data = update.callbackQuery().data();
         long chatId = update.callbackQuery().message().chat().id();
+
         InlineKeyboardMarkup back = shelterMessage.keyboards(BACK);
         InlineKeyboardMarkup menu = shelterMessage.keyboards(INFORMATION,
                 SCHEDULE, PASS, SECURITY, PERSONAL_INFO, CALL_A_VOLUNTEER, BACK);
@@ -80,5 +81,20 @@ public class InfoHandler extends AbstractHandler {
                 case "/" + BACK -> menuHandler.handleUpdate(update);
             }
         }
-    }
-}
+//        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards(BACK);
+//        String message = """
+//        1. Бот может рассказать о приюте
+//                
+//        2. Бот может выдать расписание работы приюта и адрес, схему проезда
+//        
+//        3. Бот может выдать контактные данные охраны для оформления пропуска на машину
+//        
+//        4. Бот может выдать общие рекомендации о технике безопасности на территории приюта
+//        
+//        5. Бот может принять и записать контактные данные для связи
+//        
+//        6. Если бот не может ответить на вопросы клиента, то можно позвать волонтера""";
+//        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("1","2","3","4","5","6");
+//        shelterMessage.sendButtonMessage(chatId, telegramBot, message, inlineKeyboardMarkup);
+//    }
+//}

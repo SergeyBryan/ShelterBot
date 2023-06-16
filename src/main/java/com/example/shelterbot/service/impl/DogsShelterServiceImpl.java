@@ -19,8 +19,7 @@ public class DogsShelterServiceImpl implements DogsShelterService {
 
     @Override
     public DogsShelter save(DogsShelter dogsShelter) {
-        dogsShelterRepository.save(dogsShelter);
-        return dogsShelter;
+        return dogsShelterRepository.save(dogsShelter);
     }
 
     @Override
