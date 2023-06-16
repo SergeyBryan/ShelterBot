@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Отправляет сообщение пользователю с предложением вызвать волонтера.
  */
 @Component
-@Order
+@Order(100)
 public class DefaultHandler extends AbstractHandler {
 
     /**
