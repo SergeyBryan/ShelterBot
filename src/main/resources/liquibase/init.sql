@@ -42,9 +42,21 @@ create table dogs_shelter
 create table dogs
 (
     id      bigserial primary key,
-    name    text not null,
-    age     int  not null,
-    shelter bigserial not null references dogs_shelter(id)
+    name    text      not null,
+    age     int       not null,
+    shelter bigserial not null references dogs_shelter (id)
+);
+
+create table reports
+(
+    id              bigserial primary key,
+    created_time    timestamp not null,
+    pet_photo       text,
+    diet            text,
+    general_health  text,
+    behavior_change text,
+    user_owner_id   bigserial not null references users (id),
+    pet_id          bigserial not null
 );
 
 ALTER TABLE cats_shelter
