@@ -81,6 +81,8 @@ public class InfoHandler extends AbstractHandler {
                 case "/" + BACK -> menuHandler.handleUpdate(update);
             }
         }
+    }
+}
 //        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards(BACK);
 //        String message = """
 //        1. Бот может рассказать о приюте
