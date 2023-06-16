@@ -27,7 +27,9 @@ public abstract class AbstractHandler implements TelegramHandler {
     protected static final String PET_REPORT = "Прислать отчет о питомце";
     protected static final String CALL_A_VOLUNTEER = "Позвать волонтера";
     protected static final String BACK = "Назад";
-    protected static final List<String> MENU_LIST = (List.of(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER));
+    protected static final List<String> MENU_LIST = (List.of(INFO, HOW_TO_TAKE_A_PET,
+//            PET_REPORT,
+            CALL_A_VOLUNTEER));
 
     protected static final String INFORMATION = "Информация о приюте";
     protected static final String BACK_MENU = "Вернуться в информационное меню";
