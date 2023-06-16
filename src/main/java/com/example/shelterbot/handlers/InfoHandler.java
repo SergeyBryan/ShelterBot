@@ -42,10 +42,7 @@ public class InfoHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
-            for (String text : MENU_LIST) {
-                update.callbackQuery().data().equals("/" + text);
-                return true;
-            }
+            return (update.callbackQuery().data().equals("/" + INFO));
         }
         return false;
     }
@@ -57,21 +54,36 @@ public class InfoHandler extends AbstractHandler {
      */
     @Override
     public void handleUpdate(Update update) {
-        String data = update.callbackQuery().data();
+//        String data = update.callbackQuery().data();
         long chatId = update.callbackQuery().message().chat().id();
-        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards(BACK);
-        if (data != null) {
-            switch (data) {
-                case "/" + INFO ->
-                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Инфо: \n Здесь можно узнать как взять питомца из приюта", inlineKeyboardMarkup);
-                case "/" + HOW_TO_TAKE_A_PET ->
-                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Как взять: \n Здесь можно узнать в какие дни взять", inlineKeyboardMarkup);
-                case "/" + PET_REPORT ->
-                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Отчёт о питомце: \n Отчёт о вашем питомце здесь:", inlineKeyboardMarkup);
-                case "/" + CALL_A_VOLUNTEER ->
-                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Волонтёр", inlineKeyboardMarkup);
-                case "/" + BACK -> menuHandler.handleUpdate(update);
-            }
-        }
+//        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards(BACK);
+        String message = """
+        1. Бот может рассказать о приюте
+                
+        2. Бот может выдать расписание работы приюта и адрес, схему проезда
+        
+        3. Бот может выдать контактные данные охраны для оформления пропуска на машину
+        
+        4. Бот может выдать общие рекомендации о технике безопасности на территории приюта
+        
+        5. Бот может принять и записать контактные данные для связи
+        
+        6. Если бот не может ответить на вопросы клиента, то можно позвать волонтера""";
+        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("1","2","3","4","5","6");
+        shelterMessage.sendButtonMessage(chatId, telegramBot, message, inlineKeyboardMarkup);
+
+//        if (data != null) {
+//            switch (data) {
+//                case "/" + INFO ->
+//                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Инфо: \n Здесь можно узнать как взять питомца из приюта", inlineKeyboardMarkup);
+//                case "/" + HOW_TO_TAKE_A_PET ->
+//                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Как взять: \n Здесь можно узнать в какие дни взять", inlineKeyboardMarkup);
+//                case "/" + PET_REPORT ->
+//                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Отчёт о питомце: \n Отчёт о вашем питомце здесь:", inlineKeyboardMarkup);
+//                case "/" + CALL_A_VOLUNTEER ->
+//                        shelterMessage.sendButtonMessage(chatId, telegramBot, "Волонтёр", inlineKeyboardMarkup);
+//                case "/" + BACK -> menuHandler.handleUpdate(update);
+//            }
+//        }
     }
 }

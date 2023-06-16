@@ -12,13 +12,14 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
 /**
- * Реализация интерфейса FileService для сохранения изображений
+ * Реализация интерфейса FileService для сохранения и загрузки файлов
  */
 @Service
 public class FileServiceImpl implements FileService {
@@ -27,7 +28,7 @@ public class FileServiceImpl implements FileService {
      * Путь к папке, в которой будут сохраняться изображения
      */
     @Value("${path.to.file.folder}")
-    private String filePath;
+    private static String filePath;
 
     /**
      * Логгер для записи действий и ошибок в лог-файл
@@ -77,5 +78,26 @@ public class FileServiceImpl implements FileService {
             return "";
         }
         return path.toString();
+    }
+
+    /**
+     * Метод загрузки изображения из файловой системы
+     * @param filePath путь к файлу в файловой системе
+     * @return массив байт изображения
+     */
+    @Override
+    public byte[] getImage(String filePath) {
+        byte[] result = new byte[0];
+        try {
+            java.io.File file = new java.io.File(filePath);
+            result = Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            logger.error(ERROR_MARKER,
+                    "Ошибка загрузки изображения из системы"
+                            + e.getMessage()
+                            + Arrays.toString(e.getStackTrace()),
+                    e);
+        }
+        return result;
     }
 }
