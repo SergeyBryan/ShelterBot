@@ -1,8 +1,10 @@
 package com.example.shelterbot.controllers;
 
 import com.example.shelterbot.model.Cats;
+import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Volunteer;
 import com.example.shelterbot.service.CatsService;
+import com.example.shelterbot.service.DogsService;
 import com.example.shelterbot.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class VolunteerController {
     private final VolunteerService volunteerService;
     private final CatsService catsService;
+    private final DogsService dogsService;
 
-    public VolunteerController(VolunteerService volunteerService, CatsService catsService) {
+    public VolunteerController(VolunteerService volunteerService, CatsService catsService, DogsService dogsService) {
         this.volunteerService = volunteerService;
         this.catsService = catsService;
+        this.dogsService = dogsService;
     }
 
     @SneakyThrows
@@ -76,8 +80,8 @@ public class VolunteerController {
     }
 
     @SneakyThrows
-    @PostMapping("/add-animal")
-    @Operation(summary = "Добавление животного.", description = "Добавление нового животного в приют.")
+    @PostMapping("/add-cats")
+    @Operation(summary = "Добавление кошки.", description = "Добавление новой кошки в приют.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Запрос выполнен."),
@@ -86,8 +90,24 @@ public class VolunteerController {
             @ApiResponse(responseCode = "500",
                     description = "Произошла ошибка, не зависящая от вызывающей стороны.")
     })
-    public ResponseEntity<String> addAnimal(@RequestBody Cats cats) {
-            catsService.save(cats);
-            return ResponseEntity.ok("Животное " + cats.getName() + " успешно добавлено в приют");
+    public ResponseEntity<String> addCats(@RequestBody Cats cats) {
+        catsService.save(cats);
+        return ResponseEntity.ok("Животное " + cats.getName() + " успешно добавлено в приют");
+    }
+
+    @SneakyThrows
+    @PostMapping("/add-dogs")
+    @Operation(summary = "Добавление собаки.", description = "Добавление новой собаки в приют.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Запрос выполнен."),
+            @ApiResponse(responseCode = "400",
+                    description = "Некорректный формат запроса."),
+            @ApiResponse(responseCode = "500",
+                    description = "Произошла ошибка, не зависящая от вызывающей стороны.")
+    })
+    public ResponseEntity<String> addDogs(@RequestBody Dogs dogs) {
+        dogsService.save(dogs);
+        return ResponseEntity.ok("Животное " + dogs.getName() + " успешно добавлено в приют");
     }
 }

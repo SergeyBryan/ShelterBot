@@ -9,7 +9,7 @@ create table users
     chat_id   text not null unique,
     phone_num text not null,
     address  text,
-    trialPeriod timestamp
+    trial_period timestamp
 );
 
 create table volunteer
