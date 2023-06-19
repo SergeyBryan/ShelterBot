@@ -1,9 +1,13 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.model.Report;
+import com.example.shelterbot.service.ReportsService;
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(100)
 public class DefaultHandler extends AbstractHandler {
+    ReportsService reportsService;
 
     /**
      * Создает экземпляр класса DefaultHandler.
@@ -23,6 +28,11 @@ public class DefaultHandler extends AbstractHandler {
      */
     public DefaultHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
         super(telegramBot, shelterMessage);
+    }
+
+    @Autowired
+    public void setReportsService(ReportsService reportsService) {
+        this.reportsService = reportsService;
     }
 
     /**
@@ -43,6 +53,10 @@ public class DefaultHandler extends AbstractHandler {
      */
     @Override
     public void handleUpdate(Update update) {
+        if (update.message().text().startsWith("Отчет:")) {
+            reportsService.save(update.message());
+        }
+
         telegramBot.execute(
                 new SendMessage(
                         update.message().chat().id(), "Позвать волонтера"

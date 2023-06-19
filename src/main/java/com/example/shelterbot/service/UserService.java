@@ -11,4 +11,8 @@ public interface UserService {
     User getById(int id) throws NotFoundException;
 
     List<User> getAll();
+
+    boolean extendTrialPeriod(int days, int id);
+
+    User getUserByChatId(String chatId);
 }
