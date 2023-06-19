@@ -13,4 +13,6 @@ public interface UserService {
     List<User> getAll();
 
     boolean extendTrialPeriod(int days, int id);
+
+    User getUserByChatId(String chatId);
 }

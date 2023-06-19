@@ -49,4 +49,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public User getUserByChatId(String chatId) {
+        return userRepository.getUserByChatId(chatId);
+    }
 }

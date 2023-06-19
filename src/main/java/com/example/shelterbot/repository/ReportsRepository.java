@@ -1,7 +1,6 @@
 package com.example.shelterbot.repository;
 
 import com.example.shelterbot.model.Report;
-import com.example.shelterbot.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

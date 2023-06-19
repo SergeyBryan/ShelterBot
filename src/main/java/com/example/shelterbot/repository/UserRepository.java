@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("UPDATE User u set u.trialPeriod = :newTrialPeriod WHERE u.id = :id")
     void extendTrialPeriod(LocalDateTime newTrialPeriod, String id);
+
+    @Transactional
+    User getUserByChatId(String chatId);
 }
