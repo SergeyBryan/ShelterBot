@@ -6,6 +6,7 @@ import com.example.shelterbot.repository.UserRepository;
 import com.example.shelterbot.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +36,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public boolean extendTrialPeriod(int days, int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            LocalDateTime newTrialPeriod = user.get().getTrialPeriod().plusDays(days);
+            userRepository.extendTrialPeriod(newTrialPeriod, String.valueOf(id));
+            return true;
+        } else {
+            return false;
+        }
     }
 }

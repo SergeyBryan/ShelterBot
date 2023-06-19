@@ -15,13 +15,19 @@ public class ReportsServiceImpl implements ReportsService {
         this.reportsRepository = reportsRepository;
     }
 
+    @Override
     public Report save(Report report) {
         return reportsRepository.save(report);
     }
 
+    @Override
     public List<Report> getAll() {
         return reportsRepository.findAll();
     }
 
+    @Override
+    public Report getByUserId(Long id) {
+        return reportsRepository.getByUserOwner_Id(id);
+    }
 
 }
