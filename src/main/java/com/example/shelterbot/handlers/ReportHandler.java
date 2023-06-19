@@ -40,6 +40,8 @@ public class ReportHandler extends AbstractHandler {
 
             var chatId = update.callbackQuery().from().id();
             SendMessage sendMessage = new SendMessage(chatId,
+                    "Важно! Сообщение должно начинаться со слова 'Отчет'\n Пример отчета:\n" +
+                            "Отчет:\n" +
                     EXAMPLE_DIET + "\n" +
                             EXAMPLE_GENERAL_HEALTH + "\n" +
                             EXAMPLE_BEHAVIOR_CHANGE);

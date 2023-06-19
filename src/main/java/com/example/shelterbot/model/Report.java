@@ -18,14 +18,8 @@ public class Report {
     @Column(name = "pet_photo")
     private String petPhoto;
 
-    @Column(name = "diet")
-    private String diet;
-
-    @Column(name = "general_health")
-    private String generalHealth;
-
-    @Column(name = "behavior_change")
-    private String behaviorChange;
+    @Column(name = "text")
+    private String text;
 
     @OneToOne()
     private User userOwner;
@@ -36,11 +30,9 @@ public class Report {
     public Report() {
     }
 
-    public Report(String petPhoto, String diet, String generalHealth, String behaviorChange, User userOwner, Long petId) {
+    public Report(String petPhoto, String text, User userOwner, Long petId) {
         this.petPhoto = petPhoto;
-        this.diet = diet;
-        this.generalHealth = generalHealth;
-        this.behaviorChange = behaviorChange;
+        this.text = text;
         this.userOwner = userOwner;
         PetId = petId;
     }
@@ -69,28 +61,12 @@ public class Report {
         this.petPhoto = petPhoto;
     }
 
-    public String getDiet() {
-        return diet;
+    public String getText() {
+        return text;
     }
 
-    public void setDiet(String diet) {
-        this.diet = diet;
-    }
-
-    public String getGeneralHealth() {
-        return generalHealth;
-    }
-
-    public void setGeneralHealth(String generalHealth) {
-        this.generalHealth = generalHealth;
-    }
-
-    public String getBehaviorChange() {
-        return behaviorChange;
-    }
-
-    public void setBehaviorChange(String behaviorChange) {
-        this.behaviorChange = behaviorChange;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public User getUserOwner() {

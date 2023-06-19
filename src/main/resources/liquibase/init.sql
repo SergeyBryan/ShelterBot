@@ -8,8 +8,7 @@ create table users
     name     text not null,
     chat_id   text not null unique,
     phone_num text not null,
-    address  text,
-    trial_period timestamp
+    address  text
 );
 
 create table volunteer
@@ -53,9 +52,7 @@ create table reports
     id              bigserial primary key,
     created_time    timestamp not null,
     pet_photo       text,
-    diet            text,
-    general_health  text,
-    behavior_change text,
+    text            text,
     user_owner_id   bigserial not null references users (id),
     pet_id          bigserial not null
 );
