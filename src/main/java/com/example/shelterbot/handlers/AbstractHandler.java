@@ -1,6 +1,7 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import org.springframework.stereotype.Component;
 
