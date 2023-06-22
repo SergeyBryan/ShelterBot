@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying

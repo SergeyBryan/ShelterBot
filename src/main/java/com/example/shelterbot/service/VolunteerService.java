@@ -16,7 +16,7 @@ public interface VolunteerService {
 
     List<Volunteer> getAll();
 
-    void extendTrialPeriod(int days, int id);
+    void extendTrialPeriod(int days, long id);
 
     List<Report> getAllReports();
 
