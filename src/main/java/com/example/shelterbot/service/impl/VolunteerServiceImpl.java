@@ -85,7 +85,7 @@ public class VolunteerServiceImpl implements VolunteerService {
     /**
      * Метод для продления испытательного срока волонтера.
      * @param days Количество дней для продления.
-     * @param id ID волонтера.
+     * @param id ID пользователя.
      */
     @Override
     public void extendTrialPeriod(int days, int id) {
