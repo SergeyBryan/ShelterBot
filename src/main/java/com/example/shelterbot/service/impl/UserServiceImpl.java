@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) throws NotFoundException {
+    public User getById(long id) throws NotFoundException {
         Optional<User> optionalUser =  userRepository.findById(id);
         if (optionalUser.isPresent()) {
             return optionalUser.get();
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean extendTrialPeriod(int days, int id) {
+    public boolean extendTrialPeriod(int days, long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             LocalDateTime newTrialPeriod = user.get().getTrialPeriod().plusDays(days);

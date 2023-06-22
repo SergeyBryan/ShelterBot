@@ -88,7 +88,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @param id ID пользователя.
      */
     @Override
-    public void extendTrialPeriod(int days, int id) {
+    public void extendTrialPeriod(int days, long id) {
         userService.extendTrialPeriod(days, id);
     }
 
