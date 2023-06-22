@@ -22,5 +22,4 @@ public class User {
     private String address;
     private LocalDateTime trialPeriod;
 
-    private LocalDateTime trialPeriod;
 }
