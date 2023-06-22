@@ -4,39 +4,40 @@
 
 create table users
 (
-    id       bigserial primary key,
-    name     text not null,
-    chat_id   text not null unique,
-    phone_num text not null,
-    address  text,
+    id           bigserial primary key,
+    name         text not null,
+    chat_id      text not null unique,
+    phone_num    text not null,
+    address      text,
     trial_period timestamp
+
 );
 
 create table volunteer
 (
-    id       bigserial primary key,
-    name     text not null,
+    id        bigserial primary key,
+    name      text not null,
     chat_id   text not null unique,
     phone_num text not null
 );
 
 create table cats_shelter
 (
-    id      bigserial primary key,
+    id   bigserial primary key,
     cats bigserial not null
 );
 
 create table cats
 (
     id      bigserial primary key,
-    name    text not null,
-    age     int  not null,
-    shelter bigserial not null references cats_shelter(id)
+    name    text      not null,
+    age     int       not null,
+    shelter bigserial not null references cats_shelter (id)
 );
 
 create table dogs_shelter
 (
-    id      bigserial primary key,
+    id   bigserial primary key,
     dogs bigserial not null
 );
 
@@ -54,8 +55,9 @@ create table reports
     created_time    timestamp not null,
     pet_photo       text,
     diet            text,
-    general_health  text,
     behavior_change text,
+    general_health text,
+    text            text,
     user_owner_id   bigserial not null references users (id),
     pet_id          bigserial not null
 );
