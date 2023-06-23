@@ -17,9 +17,9 @@ public class CatsShelter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "shelter",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Cats> cats;
+//    @OneToMany(mappedBy = "shelter",
+//            fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private List<Cats> cats;
 }

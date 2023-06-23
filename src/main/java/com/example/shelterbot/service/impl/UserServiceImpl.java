@@ -10,19 +10,37 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для работы с пользователями.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    /**
+     * Конструктор класса.
+     * @param userRepository репозиторий пользователей
+     */
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Сохранение пользователя в базу данных.
+     * @param user пользователь
+     * @return сохраненный пользователь
+     */
     @Override
     public User save(User user) {
         return userRepository.save(user);
     }
 
+    /**
+     * Получение пользователя по его идентификатору.
+     * @param id идентификатор пользователя
+     * @return пользователь
+     * @throws NotFoundException если пользователь не найден
+     */
     @Override
     public User getById(long id) throws NotFoundException {
         Optional<User> optionalUser =  userRepository.findById(id);
@@ -33,11 +51,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Получение списка всех пользователей.
+     * @return список пользователей
+     */
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
+    /**
+     * Продление испытательного периода пользователя на заданное количество дней.
+     * @param days количество дней
+     * @param id идентификатор пользователя
+     * @return true, если операция выполнена успешно, false, если пользователь не найден
+     */
     @Override
     public boolean extendTrialPeriod(int days, long id) {
         Optional<User> user = userRepository.findById(id);
@@ -50,8 +78,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Получение пользователя по его идентификатору чата.
+     * @param chatId идентификатор чата
+     * @return пользователь
+     */
     @Override
     public User getUserByChatId(String chatId) {
         return userRepository.getUserByChatId(chatId);
+    }
+
+    /**
+     * Добавление питомца к пользователю.
+     * @param petId идентификатор питомца
+     * @param dogOrCat тип питомца (собака или кошка)
+     * @param userId идентификатор пользователя
+     * @return true, если операция выполнена успешно
+     */
+    @Override
+    public boolean addPetToOwner(long petId, String dogOrCat, String userId) {
+        userRepository.addPetToOwner(petId, dogOrCat, userId);
+        return true;
     }
 }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(100)
 public class DefaultHandler extends AbstractHandler {
-    ReportsService reportsService;
 
     /**
      * Создает экземпляр класса DefaultHandler.
@@ -28,11 +27,6 @@ public class DefaultHandler extends AbstractHandler {
      */
     public DefaultHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
         super(telegramBot, shelterMessage);
-    }
-
-    @Autowired
-    public void setReportsService(ReportsService reportsService) {
-        this.reportsService = reportsService;
     }
 
     /**
@@ -53,9 +47,6 @@ public class DefaultHandler extends AbstractHandler {
      */
     @Override
     public void handleUpdate(Update update) {
-        if (update.message().text().startsWith("Отчет:")) {
-            reportsService.save(update.message());
-        }
 
         telegramBot.execute(
                 new SendMessage(

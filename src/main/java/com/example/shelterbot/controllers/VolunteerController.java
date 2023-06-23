@@ -3,15 +3,13 @@ package com.example.shelterbot.controllers;
 import com.example.shelterbot.model.Cats;
 import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Report;
-import com.example.shelterbot.model.Volunteer;
-import com.example.shelterbot.service.CatsService;
-import com.example.shelterbot.service.DogsService;
 import com.example.shelterbot.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +38,7 @@ public class VolunteerController {
         return ResponseEntity.ok(volunteerService.getReportByUserId((int) id));
     }
 
-    @PostMapping("/extend-trial-period")
+    @PutMapping("/extend-trial-period")
     @Operation(summary = "Продлить испытательный срок.", description = "Продливание испытательного срока животного.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -84,4 +82,46 @@ public class VolunteerController {
         volunteerService.addDogInShelter(dogs);
         return ResponseEntity.ok("Животное " + dogs.getName() + " успешно добавлено в приют");
     }
+
+    @PutMapping("/add-pet-to-owner")
+    @Operation(
+            summary = "Привязать питомца к усыновителю",
+            description = "Привязать питомца к усыновителю",
+            parameters = {
+                    @Parameter(
+                            name = "dogOrCat",
+                            description = "Необходимо указать собаку или кошку забрал усыновитель в формате Dog/Cat",
+                            example = "Dog/Cat"
+                    ),
+                    @Parameter(
+                            name = "userid",
+                            description = "Необходимо указать айди пользователя к которому прикрепляется питомец",
+                            example = "1"
+                    ),
+                    @Parameter(
+                            name = "petid",
+                            description = "Необходимо указать айди питомца который прикрепляется к пользователю",
+                            example = "1"
+                    )
+            })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200",
+                            description = "Запрос выполнен."),
+                    @ApiResponse(responseCode = "400",
+                            description = "Некорректный формат запроса."),
+                    @ApiResponse(responseCode = "500",
+                            description = "Произошла ошибка, не зависящая от вызывающей стороны.")
+            })
+    public ResponseEntity<String> addPetToOwner(@RequestParam long userid,
+                                                @RequestParam long petid,
+                                                @RequestParam String dogOrCat) {
+        String regex = "^(Dog|Cat)$";
+        if (!dogOrCat.equals(regex)) {
+            return new ResponseEntity<>("Неккоректное значение параметра dogOrCat", HttpStatus.BAD_REQUEST);
+        }
+        volunteerService.addPetToOwner(petid, dogOrCat, userid);
+        return ResponseEntity.ok("Питомец успешно закреплен за пользоватлем ");
+    }
+
 }

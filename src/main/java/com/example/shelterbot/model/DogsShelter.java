@@ -16,10 +16,10 @@ public class DogsShelter  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "shelter",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Dogs> dogs;
+//    @OneToMany(mappedBy = "shelter",
+//            fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private List<Dogs> dogs;
 
 }

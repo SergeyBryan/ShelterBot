@@ -9,7 +9,9 @@ create table users
     chat_id      text not null unique,
     phone_num    text not null,
     address      text,
-    trial_period timestamp
+    trial_period timestamp,
+    animal        text,
+    petid        bigint
 );
 
 create table volunteer
@@ -50,20 +52,20 @@ create table dogs
 
 create table reports
 (
-    id              bigserial primary key,
-    created_time    timestamp not null,
-    pet_photo       text,
-    text            text,
-    user_owner_id   bigserial not null references users (id),
-    pet_id          bigserial not null
+    id            bigserial primary key,
+    created_time  timestamp not null,
+    pet_photo     text,
+    text          text,
+    user_owner_id bigserial not null references users (id),
+    pet_id        bigserial not null
 );
 
-ALTER TABLE cats_shelter
-    ADD CONSTRAINT fk_cats_shelter
-        FOREIGN KEY (cats)
-            REFERENCES cats (id);
-
-ALTER TABLE dogs_shelter
-    ADD CONSTRAINT fk_dogs_shelter
-        FOREIGN KEY (dogs)
-            REFERENCES dogs (id);
+-- ALTER TABLE cats_shelter
+--     ADD CONSTRAINT fk_cats_shelter
+--         FOREIGN KEY (cats)
+--             REFERENCES cats (id);
+--
+-- ALTER TABLE dogs_shelter
+--     ADD CONSTRAINT fk_dogs_shelter
+--         FOREIGN KEY (dogs)
+--             REFERENCES dogs (id);

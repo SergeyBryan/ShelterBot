@@ -15,4 +15,6 @@ public interface UserService {
     boolean extendTrialPeriod(int days, long id);
 
     User getUserByChatId(String chatId);
+
+    boolean addPetToOwner(long petId, String dogOrCat, String userId);
 }

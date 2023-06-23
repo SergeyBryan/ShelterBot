@@ -25,4 +25,6 @@ public interface VolunteerService {
     Cats addCatInShelter(Cats cats);
 
     Dogs addDogInShelter(Dogs dogs);
+
+    boolean addPetToOwner(long petId, String dogOrCat, long userId);
 }
