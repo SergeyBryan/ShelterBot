@@ -19,12 +19,15 @@ import java.time.LocalDateTime;
 @Component
 @Order(4)
 public class ReportHandler extends AbstractHandler {
+
     private final ReportsService reportsService;
+
     private final FileService fileService;
     private static final String EXAMPLE_PHOTO = "src/main/resources/files/пример.jpeg";
     private static final String EXAMPLE_DIET = "Рацион животного";
     private static final String EXAMPLE_GENERAL_HEALTH = "Общее самочувствие и привыкание к новому месту";
     private static final String EXAMPLE_BEHAVIOR_CHANGE = "Изменение в поведении: отказ от старых привычек, приобретение новых";
+
 
     public ReportHandler(ReportsService reportsService,
                          TelegramBot telegramBot,
@@ -60,7 +63,12 @@ public class ReportHandler extends AbstractHandler {
 
             byte[] photo = fileService.getImage(EXAMPLE_PHOTO);
             SendPhoto sendPhoto = new SendPhoto(chatId, photo);
-
+//          Создание отчёта
+            User user = userService.getAll().stream().findFirst().get();
+            Report report = new Report("photo", "text", user, 2L);
+            report.setCreatedTime(LocalDateTime.now());
+            reportsService.save(report);
+//           -------
             telegramBot.execute(sendMessage);
             telegramBot.execute(sendPhoto);
         } else {
