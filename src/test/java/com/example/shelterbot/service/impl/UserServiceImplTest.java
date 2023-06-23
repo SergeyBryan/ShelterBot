@@ -43,18 +43,18 @@ class UserServiceImplTest {
         User user = new User();
         user.setId(1L);
         Optional<User> optionalUser = Optional.of(user);
-        when(userRepository.findById(1)).thenReturn(optionalUser);
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
         User foundUser = userService.getById(1);
         Assertions.assertEquals(user, foundUser);
-        verify(userRepository, times(1)).findById(1);
+        verify(userRepository, times(1)).findById(1L);
     }
 
     @Test
     void getByIdNotFoundExceptionTest() {
         Optional<User> optionalUser = Optional.empty();
-        when(userRepository.findById(1)).thenReturn(optionalUser);
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
         Assertions.assertThrows(NotFoundException.class, () -> userService.getById(1));
-        verify(userRepository, times(1)).findById(1);
+        verify(userRepository, times(1)).findById(1L);
     }
 
     @Test
