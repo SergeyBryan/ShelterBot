@@ -1,84 +1,54 @@
 package com.example.shelterbot.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.exceptions.TelegramApiException;
 import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.response.GetFileResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.telegram.telegrambots.meta.api.objects.File;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FileServiceImplTest {
 
-    @Mock
-    private TelegramBot telegramBot;
+    private final TelegramBot telegramBot = mock(TelegramBot.class);
+    private final FileServiceImpl fileService = new FileServiceImpl(telegramBot);
 
-    private FileServiceImpl fileService;
+    @Value("${path.to.file.folder}")
+    private static String filePath;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        fileService = new FileServiceImpl(telegramBot);
+    void setUp() throws IOException {
+        when(telegramBot.getFileContent(mock(File.class))).thenReturn("Test image content".getBytes());
     }
 
     @Test
-    void saveImage_shouldSaveImageToFileSystem() throws TelegramApiException, IOException {
-        Message message = createMessageWithPhoto();
-        File file = new File();
-        file.setFileId("fileId");
-        file.setFileUniqueId("fileUniqueId");
-        when(telegramBot.execute(any(GetFile.class))).thenReturn(new GetFileResponse().setFile(file));
-        when(telegramBot.getFileContent(file)).thenReturn(new byte[0]);
-
-        String result = fileService.saveImage(message);
-
-        FileTest
-        Assertions.assertNotEquals("", result);
-        Assertions.assertTrue(Files.exists(Path.of(result)));
+    void testSaveImage() {
+        Message message = mock(Message.class);
+        File file = mock(File.class);
+        when(file.fileUniqueId()).thenReturn("test_file_id");
+        when(message.photo()).thenReturn(new com.pengrad.telegrambot.model.PhotoSize[]{mock(com.pengrad.telegrambot.model.PhotoSize.class)});
+        GetFileResponse getFileResponse = mock(GetFileResponse.class);
+        when(getFileResponse.file()).thenReturn(file);
+        when(telegramBot.execute(new GetFile("test_file_id"))).thenReturn(getFileResponse);
+        String imagePath = fileService.saveImage(message);
+        assertEquals(Path.of(filePath, "test_file_id").toString(), imagePath);
     }
 
     @Test
-    void saveImage_shouldReturnEmptyStringOnError() throws TelegramApiException {
-        Message message = createMessageWithPhoto();
-        when(telegramBot.execute(any(GetFile.class))).thenThrow(new TelegramApiException("Error"));
-        String result = fileService.saveImage(message);
-        Assertions.assertEquals("", result);
-    }
-
-    @Test
-    void getImage_shouldReturnByteArray() {
-        byte[] expected = new byte[]{1, 2, 3};
-        String filePath = "test.txt";
-        try {
-            Files.write(Path.of(filePath), expected);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        byte[] result = fileService.getImage(filePath);
-        Assertions.assertArrayEquals(expected, result);
-    }
-
-    private Message createMessageWithPhoto() {
-        PhotoSize photoSize = new PhotoSize();
-        photoSize.setFileId("fileId");
-        photoSize.setFileSize(1024);
-        photoSize.setHeight(100);
-        photoSize.setWidth(100);
-        return new Message().setPhoto(new org.telegram.telegrambots.meta.api.objects.PhotoSize[]{photoSize});
+    void testGetImage() throws IOException {
+        Path tempFilePath = Files.createTempFile("test_image", ".jpg");
+        byte[] imageBytes = Files.readAllBytes(tempFilePath);
+        byte[] resultBytes = fileService.getImage(tempFilePath.toString());
+        Assertions.assertArrayEquals(imageBytes, resultBytes);
     }
 }
