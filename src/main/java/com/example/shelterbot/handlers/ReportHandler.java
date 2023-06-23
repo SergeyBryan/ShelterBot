@@ -63,12 +63,7 @@ public class ReportHandler extends AbstractHandler {
 
             byte[] photo = fileService.getImage(EXAMPLE_PHOTO);
             SendPhoto sendPhoto = new SendPhoto(chatId, photo);
-//          Создание отчёта
-            User user = userService.getAll().stream().findFirst().get();
-            Report report = new Report("photo", "text", user, 2L);
-            report.setCreatedTime(LocalDateTime.now());
-            reportsService.save(report);
-//           -------
+
             telegramBot.execute(sendMessage);
             telegramBot.execute(sendPhoto);
         } else {
