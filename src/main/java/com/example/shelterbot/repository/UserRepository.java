@@ -18,5 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void extendTrialPeriod(LocalDateTime newTrialPeriod, String id);
 
     @Transactional
+    @Modifying
+    @Query("UPDATE User u set u.petID = :petId, u.animal = :animal WHERE u.id = :id")
+    void addPetToOwner(long petId, String animal, String id);
+
+    @Transactional
     User getUserByChatId(String chatId);
 }

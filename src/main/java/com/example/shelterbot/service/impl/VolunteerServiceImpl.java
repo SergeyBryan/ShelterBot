@@ -130,4 +130,18 @@ public class VolunteerServiceImpl implements VolunteerService {
     public Dogs addDogInShelter(Dogs dogs) {
         return dogsService.save(dogs);
     }
+
+    /**
+     * Добавление питомца к пользователю.
+     * @param petId идентификатор питомца
+     * @param dogOrCat тип питомца (собака или кошка)
+     * @param userId идентификатор пользователя
+     * @return true, если операция выполнена успешно
+     */
+    @Override
+    public boolean addPetToOwner(long petId, String dogOrCat, long userId) {
+        userService.addPetToOwner(petId, dogOrCat, String.valueOf(userId));
+        return true;
+    }
+
 }

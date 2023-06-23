@@ -37,9 +37,7 @@ public class ReportsServiceImpl implements ReportsService {
         String text = message.text();
 
         User user = userService.getUserByChatId(String.valueOf(chatId));
-//        todo сделать связь пользователя с забранным из приюта питомца
-//        Report report = new Report(pathToPhoto, text, user, petId);
-        Report report = null;
+        Report report = new Report(pathToPhoto, text, user, user.getPetID());
         return save(report);
     }
 

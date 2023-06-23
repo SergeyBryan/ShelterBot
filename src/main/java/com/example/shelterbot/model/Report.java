@@ -25,7 +25,7 @@ public class Report {
     private User userOwner;
 
     @Column(name = "pet_id")
-    private Long PetId;
+    private Long petId;
 
     public Report() {
     }
@@ -34,7 +34,7 @@ public class Report {
         this.petPhoto = petPhoto;
         this.text = text;
         this.userOwner = userOwner;
-        PetId = petId;
+        this.petId = petId;
     }
 
     public Long getId() {
@@ -78,10 +78,10 @@ public class Report {
     }
 
     public Long getPetId() {
-        return PetId;
+        return petId;
     }
 
     public void setPetId(Long petId) {
-        PetId = petId;
+        this.petId = petId;
     }
 }
