@@ -38,7 +38,7 @@ class ShelterInfoHandlerTest {
         CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
         Update update = Mockito.mock(Update.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/information");
+        when(callbackQuery.data()).thenReturn("/Информация о приюте");
         assertTrue(handler.appliesTo(update));
     }
 
@@ -58,7 +58,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/back_menu");
+        when(callbackQuery.data()).thenReturn("/Вернуться в информационное меню");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -75,7 +75,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/information");
+        when(callbackQuery.data()).thenReturn("/Информация о приюте");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -94,7 +94,7 @@ class ShelterInfoHandlerTest {
         File file = Mockito.mock(File.class);
         SendPhoto sendPhoto = Mockito.mock(SendPhoto.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/schedule");
+        when(callbackQuery.data()).thenReturn("/Расписание о приюте");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -113,7 +113,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/pass");
+        when(callbackQuery.data()).thenReturn("/Оформить пропуск на машину");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -130,7 +130,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/security");
+        when(callbackQuery.data()).thenReturn("/Правила безопасности");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -147,7 +147,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/personal_info");
+        when(callbackQuery.data()).thenReturn("/Оставить контактные данные");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);

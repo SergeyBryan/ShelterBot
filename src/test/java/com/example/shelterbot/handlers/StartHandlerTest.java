@@ -1,22 +1,24 @@
 package com.example.shelterbot.handlers;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
 import com.example.shelterbot.message.ShelterMessageImpl;
 import com.example.shelterbot.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 class StartHandlerTest {
 
@@ -24,12 +26,12 @@ class StartHandlerTest {
     private TelegramBot telegramBot;
     @Mock
     private ShelterMessageImpl shelterMessage;
-
-    private StartHandler startHandler;
+    @Mock
     private UserService userService;
+    private StartHandler startHandler;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         startHandler = new StartHandler(userService, telegramBot, shelterMessage);
     }
@@ -59,23 +61,35 @@ class StartHandlerTest {
     }
 
     @Test
-    void handleUpdate_withStartCommand_shouldSendWelcomeMessage() {
+    void handleUpdate_withStartCommand_shouldSendWelcomeMessageForNewUser() {
         var chatId = 123L;
         String firstName = "John";
-        Chat chat = mock(Chat.class);
-        when(chat.id()).thenReturn(chatId);
-        when(chat.firstName()).thenReturn(firstName);
+        String helloMsg = "Привет " + firstName + " Я бот, который сможет отвечать на популярные вопросы людей о том, что нужно знать и уметь, чтобы забрать животное из приюта.\n" +
+        "Также я могу принимать ежедневные отчеты новых хозяев о том, как животное приспосабливается к новой обстановке\n" +
+        "А сейчас, я помогу тебе выбрать приют";
+        InlineKeyboardMarkup keyboardMarkup = mock(InlineKeyboardMarkup.class);
         Message message = mock(Message.class);
-        when(message.chat()).thenReturn(chat);
         Update update = mock(Update.class);
-        when(update.message()).thenReturn(message);
+        Chat chat = mock(Chat.class);
 
+        when(update.message()).thenReturn(message);
+        when(update.message().chat()).thenReturn(chat);
+        when(update.message().chat().id()).thenReturn(chatId);
+        when(update.message().from()).thenReturn(mock(User.class));
+        when(update.message().from().firstName()).thenReturn(firstName);
+        when(shelterMessage.keyboards(anyString(), anyString())).thenReturn(keyboardMarkup);
+        when(userService.getUserByChatId(any())).thenReturn(null);
         startHandler.handleUpdate(update);
 
-        verify(telegramBot).execute(argThat(argument -> {
-            Map<String, Object> parameters = argument.getParameters();
-            return parameters.get("chat_id").equals(chatId) &&
-                    parameters.get("text").equals("Привет " + firstName + ". Я помогу тебе выбрать приют");
-        }));
+        verify(shelterMessage).sendButtonMessage(
+                                                eq(chatId),
+                                                eq(telegramBot),
+                                                eq(helloMsg),
+                                                eq(keyboardMarkup));
+    }
+
+    @Test
+    void handleUpdate_withStartCommand_shouldSendWelcomeMessageForUser() {
+
     }
 }

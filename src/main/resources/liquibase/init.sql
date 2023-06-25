@@ -7,7 +7,7 @@ create table users
     id           bigserial primary key,
     name         text not null,
     chat_id      text not null unique,
-    phone_num    text not null,
+    phone_num    text,
     address      text,
     trial_period timestamp,
     animal        text,

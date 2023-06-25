@@ -3,6 +3,7 @@ package com.example.shelterbot.controllers;
 import com.example.shelterbot.model.Cats;
 import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Report;
+import com.example.shelterbot.model.enums.PetType;
 import com.example.shelterbot.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -115,12 +116,9 @@ public class VolunteerController {
             })
     public ResponseEntity<String> addPetToOwner(@RequestParam long userid,
                                                 @RequestParam long petid,
-                                                @RequestParam String dogOrCat) {
-        String regex = "^(Dog|Cat)$";
-        if (!dogOrCat.equals(regex)) {
-            return new ResponseEntity<>("Неккоректное значение параметра dogOrCat", HttpStatus.BAD_REQUEST);
-        }
-        volunteerService.addPetToOwner(petid, dogOrCat, userid);
+                                                @RequestParam PetType dogOrCat) {
+
+        volunteerService.addPetToOwner(petid, dogOrCat.toString(), userid);
         return ResponseEntity.ok("Питомец успешно закреплен за пользоватлем ");
     }
 
