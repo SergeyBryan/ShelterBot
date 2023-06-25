@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class ShelterMessageImpl implements ShelterMessage {
 
 
-    Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShelterMessageImpl.class);
 
 
 
