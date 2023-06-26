@@ -1,13 +1,13 @@
 package com.example.shelterbot.message;
 
 
-import com.example.shelterbot.listener.TelegramBotUpdatesListener;
-
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,12 @@ import org.springframework.stereotype.Service;
  * Метод sendButtonMessage используется для отправки сообщений ботом с кнопкой
  */
 @Service
+@Setter
+@Getter
 public class ShelterMessageImpl implements ShelterMessage {
 
 
-    Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private Logger logger = LoggerFactory.getLogger(ShelterMessageImpl.class);
 
 
 
@@ -42,7 +44,7 @@ public class ShelterMessageImpl implements ShelterMessage {
         SendMessage sendMessage = new SendMessage(id, message);
         SendResponse sendResponse = telegramBot.execute(sendMessage);
         if (!sendResponse.isOk()) {
-            LOGGER.error("Error during sending message {}", sendResponse.description());
+            logger.error("Error during sending message {}", sendResponse.description());
         }
     }
 
@@ -50,7 +52,7 @@ public class ShelterMessageImpl implements ShelterMessage {
         SendMessage sendMessage = new SendMessage(id, message);
         SendResponse sendResponse = telegramBot.execute(sendMessage.replyMarkup(keyboardMarkup));
         if (!sendResponse.isOk()) {
-            LOGGER.error("Error during sending message {}", sendResponse.description());
+            logger.error("Error during sending message {}", sendResponse.description());
         }
     }
 

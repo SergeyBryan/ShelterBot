@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Order(1)
 public class StartHandler extends AbstractHandler {
 
-    UserService userService;
+    private final UserService userService;
 
     /**
      * Создает экземпляр класса StartHandler.

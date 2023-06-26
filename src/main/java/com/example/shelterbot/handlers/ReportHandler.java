@@ -60,10 +60,8 @@ public class ReportHandler extends AbstractHandler {
                             EXAMPLE_DIET + "\n" +
                             EXAMPLE_GENERAL_HEALTH + "\n" +
                             EXAMPLE_BEHAVIOR_CHANGE);
-
             byte[] photo = fileService.getImage(EXAMPLE_PHOTO);
             SendPhoto sendPhoto = new SendPhoto(chatId, photo);
-
             telegramBot.execute(sendMessage);
             telegramBot.execute(sendPhoto);
         } else {
