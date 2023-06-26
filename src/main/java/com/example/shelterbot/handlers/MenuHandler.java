@@ -38,7 +38,7 @@ public class MenuHandler extends AbstractHandler {
      */
     @Override
     public boolean appliesTo(Update update) {
-        if (update.callbackQuery() != null) {
+        if (update.callbackQuery() != null || update.callbackQuery().data().equals("/" + INFORMATION)) {
             return (update.callbackQuery().data().equals("/" + BACK)) ||
                     (update.callbackQuery().data().equals("/" + CAT_SHELTER) || update.callbackQuery().data().equals("/" + DOG_SHELTER));
         }

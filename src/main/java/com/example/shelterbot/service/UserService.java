@@ -8,7 +8,13 @@ import java.util.List;
 public interface UserService {
     User save(User user);
 
-    User getById(int id) throws NotFoundException;
+    User getById(long id) throws NotFoundException;
 
     List<User> getAll();
+
+    boolean extendTrialPeriod(int days, long id);
+
+    User getUserByChatId(String chatId);
+
+    boolean addPetToOwner(long petId, String dogOrCat, String userId);
 }

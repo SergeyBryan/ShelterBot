@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,11 +26,12 @@ class StartHandlerTest {
     private ShelterMessageImpl shelterMessage;
 
     private StartHandler startHandler;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        startHandler = new StartHandler(telegramBot, shelterMessage);
+        startHandler = new StartHandler(userService, telegramBot, shelterMessage);
     }
 
     @Test

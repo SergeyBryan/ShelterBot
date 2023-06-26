@@ -1,9 +1,13 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.model.Report;
+import com.example.shelterbot.service.ReportsService;
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +16,7 @@ import org.springframework.stereotype.Component;
  * Отправляет сообщение пользователю с предложением вызвать волонтера.
  */
 @Component
-@Order
+@Order(100)
 public class DefaultHandler extends AbstractHandler {
 
     /**
@@ -43,6 +47,7 @@ public class DefaultHandler extends AbstractHandler {
      */
     @Override
     public void handleUpdate(Update update) {
+
         telegramBot.execute(
                 new SendMessage(
                         update.message().chat().id(), "Позвать волонтера"

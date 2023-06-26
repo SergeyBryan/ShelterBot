@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -18,5 +20,8 @@ public class User {
     private String chatId;
     private String phoneNum;
     private String address;
+    private LocalDateTime trialPeriod;
+    private String animal;
+    private Long petID;
 
 }
