@@ -8,7 +8,7 @@ import java.util.List;
 public interface CatsService {
     Cats save(Cats cats);
 
-    Cats getById(int id) throws NotFoundException;
+    Cats getById(long id) throws NotFoundException;
 
     List<Cats> getAll();
 }

@@ -54,7 +54,7 @@ public class ReportsServiceImpl implements ReportsService {
     @Override
     public void save(Message message) {
         var chatId = message.chat().id();
-        User user = userService.getUserByChatId(String.valueOf(chatId));
+        User user = userService.getUserByChatId(chatId);
         String pathToPhoto = null;
 
         if (message.photo() != null) {

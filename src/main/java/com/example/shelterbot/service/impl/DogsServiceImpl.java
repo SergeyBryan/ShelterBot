@@ -24,7 +24,7 @@ public class DogsServiceImpl implements DogsService {
     }
 
     @Override
-    public Dogs getById(int id) throws NotFoundException {
+    public Dogs getById(long id) throws NotFoundException {
         Optional<Dogs> optionalDogs =  dogsRepository.findById(id);
         if (optionalDogs.isPresent()) {
             return optionalDogs.get();

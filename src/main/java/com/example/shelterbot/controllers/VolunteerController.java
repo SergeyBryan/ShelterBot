@@ -1,5 +1,6 @@
 package com.example.shelterbot.controllers;
 
+import com.example.shelterbot.exceptions.NotFoundException;
 import com.example.shelterbot.model.Cats;
 import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Report;
@@ -115,10 +116,10 @@ public class VolunteerController {
                             description = "Произошла ошибка, не зависящая от вызывающей стороны.")
             })
     public ResponseEntity<String> addPetToOwner(@RequestParam long userid,
-                                                @RequestParam long petid,
-                                                @RequestParam PetType dogOrCat) {
+                                                @RequestParam Long petid,
+                                                @RequestParam PetType dogOrCat) throws NotFoundException {
 
-        volunteerService.addPetToOwner(petid, dogOrCat.toString(), userid);
+        volunteerService.addPetToOwner(petid, dogOrCat, userid);
         return ResponseEntity.ok("Питомец успешно закреплен за пользоватлем ");
     }
 

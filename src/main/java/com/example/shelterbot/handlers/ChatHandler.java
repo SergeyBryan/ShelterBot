@@ -1,6 +1,8 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.model.Volunteer;
+import com.example.shelterbot.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
@@ -8,8 +10,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Обработчик чата для связи между пользователем и волонтером.
@@ -20,19 +21,26 @@ import java.util.Map;
 @Order(6)
 public class ChatHandler extends DefaultHandler{
 
+    private final VolunteerService volunteerService;
+
     /**
      * Хэшмапа для хранения связи между пользователем и волонтером.
      * Ключ - айди пользователя, значение - айди волонтера.
      */
     static Map<Long, Long> chat = new HashMap<>();
 
+    static Queue<Volunteer> volunteerQueue = new LinkedList<>();
+
     /**
      * Конструктор класса.
-     * @param telegramBot объект TelegramBot для отправки сообщений.
-     * @param shelterMessage объект ShelterMessageImpl для работы с сообщениями.
+     *
+     * @param telegramBot      объект TelegramBot для отправки сообщений.
+     * @param shelterMessage   объект ShelterMessageImpl для работы с сообщениями.
+     * @param volunteerService
      */
-    public ChatHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
+    public ChatHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, VolunteerService volunteerService) {
         super(telegramBot, shelterMessage);
+        this.volunteerService = volunteerService;
     }
 
     /**
@@ -65,8 +73,7 @@ public class ChatHandler extends DefaultHandler{
 //        и записываем связь в Хэшмапу где ключ айди пользователя а значение айди волонтера
         if (update.callbackQuery()!=null) {
             if (update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER)){
-//            todo добавить назначение свободного волонтера
-                var volunteerID = 493667033L;
+                var volunteerID = freeVolunteerAppointment();
                 var userID = update.callbackQuery().from().id();
                 chat.put(userID, volunteerID);
                 var userName = update.callbackQuery().from().firstName();
@@ -115,5 +122,13 @@ public class ChatHandler extends DefaultHandler{
                 shelterMessage.sendButtonMessage(chatId, telegramBot, msg, menu);
             }
         }
+    }
+
+    private Long freeVolunteerAppointment() {
+        if (volunteerQueue.isEmpty()) {
+            List<Volunteer> allVolunteers = volunteerService.getAll();
+            Collections.addAll(volunteerQueue, allVolunteers.toArray(new Volunteer[0]));
+        }
+        return volunteerQueue.poll().getChatId();
     }
 }

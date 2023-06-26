@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String chatId;
+    private Long chatId;
     private String phoneNum;
     private String address;
     private LocalDateTime trialPeriod;

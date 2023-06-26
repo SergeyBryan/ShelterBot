@@ -53,11 +53,10 @@ public class StartHandler extends AbstractHandler {
     @Override
     public void handleUpdate(Update update) {
         long chatId = update.message().chat().id();
-        String strChatId = String.valueOf(chatId);
         var userName = update.message().chat().firstName();
         InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Приют для кошек", "Приют для собак");
 
-        User userByChatId = userService.getUserByChatId(strChatId);
+        User userByChatId = userService.getUserByChatId(chatId);
 
         if (userByChatId != null) {
             shelterMessage.sendButtonMessage(
@@ -70,7 +69,7 @@ public class StartHandler extends AbstractHandler {
         } else {
             User user = new User();
             user.setName(userName);
-            user.setChatId(strChatId);
+            user.setChatId(chatId);
             userService.save(user);
 
             String helloMessage = """

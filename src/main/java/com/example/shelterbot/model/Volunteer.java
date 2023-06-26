@@ -14,7 +14,7 @@ public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    String name;
-    String chatId;
-    String phoneNum;
+    private String name;
+    private Long chatId;
+    private String phoneNum;
 }
