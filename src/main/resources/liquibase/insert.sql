@@ -11,9 +11,6 @@
 insert into users (id, name, chat_id, phone_num, address, trial_period, cat_id, dog_id)
 VALUES (1, 'test', 493667033, 'testphone_num', 'testadres', null, null, null );
 
-insert into users (id, name, chat_id, phone_num, address, trial_period, cat_id, dog_id)
-VALUES (2, 'test2', 4936670332, null, null, null, null, null );
-
 insert into dogs_shelter (id, name)
 VALUES (1, 'test');
 
@@ -32,8 +29,6 @@ VALUES (2, 'dogtest2', 2, 1);
 
 insert into volunteer (id, name, chat_id, phone_num)
 VALUES (1, 'test', 493667033, 'testphone_num');
-insert into volunteer (id, name, chat_id, phone_num)
-VALUES (2, 'test2', 4936670332, 'testphone_num2');
 
 
 
