@@ -54,6 +54,7 @@ public class StartHandler extends AbstractHandler {
     public void handleUpdate(Update update) {
         long chatId = update.message().chat().id();
         String strChatId = String.valueOf(chatId);
+        var userName = update.message().chat().firstName();
         InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Приют для кошек", "Приют для собак");
 
         User userByChatId = userService.getUserByChatId(strChatId);
@@ -63,12 +64,12 @@ public class StartHandler extends AbstractHandler {
                                             chatId,
                                             telegramBot,
                                             "Привет "
-                                                    + update.message().chat().firstName()
+                                                    + userName
                                                     + ". Я помогу тебе выбрать приют",
                                             inlineKeyboardMarkup);
         } else {
             User user = new User();
-            user.setName(update.message().from().firstName());
+            user.setName(userName);
             user.setChatId(strChatId);
             userService.save(user);
 
@@ -80,7 +81,7 @@ public class StartHandler extends AbstractHandler {
                                             chatId,
                                             telegramBot,
                                             "Привет "
-                                                    + update.message().chat().firstName()
+                                                    + userName
                                                     + helloMessage,
                                             inlineKeyboardMarkup);
         }

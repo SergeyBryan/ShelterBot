@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -101,7 +102,16 @@ class ShelterInfoHandlerTest {
         when(shelterMessage.keyboards(any())).thenReturn(backMenu);
         when(file.toURI()).thenReturn(Path.of("src/main/resources/photo.jpg").toUri());
         handler.handleUpdate(update);
-        verify(telegramBot).execute(sendPhoto);
+
+//        verify(telegramBot).execute(sendPhoto);
+
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            boolean a = parameters.get("chat_id").equals(123L);
+            boolean b = parameters.get("photo").equals("C:\\Users\\user\\IdeaProjects\\ShelterBot\\src\\main\\resources\\photo.jpg");
+            boolean c = parameters.get("caption").equals("Схема проезда до нашего приюта");
+            return  a && b && c;
+        }));
         verify(shelterMessage).sendButtonMessage(123L, telegramBot, ShelterInfoEnum.SCHEDULE_TEXT.getText(), backMenu);
     }
 

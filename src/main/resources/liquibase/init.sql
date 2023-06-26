@@ -10,8 +10,8 @@ create table users
     phone_num    text,
     address      text,
     trial_period timestamp,
-    animal        text,
-    petid        bigint
+    cat_id        bigint,
+    dog_id        bigint
 );
 
 create table volunteer
@@ -57,9 +57,26 @@ create table reports
     pet_photo     text,
     text          text,
     user_owner_id bigserial not null references users (id),
-    pet_id        bigserial not null
+    cat_id        bigint,
+    dog_id        bigint
 );
 
+ALTER TABLE users
+    ADD CONSTRAINT fk_user_cats
+        FOREIGN KEY (cat_id)
+            REFERENCES cats (id);
+ALTER TABLE users
+    ADD CONSTRAINT fk_user_dogs
+        FOREIGN KEY (dog_id)
+            REFERENCES dogs (id);
+ALTER TABLE reports
+    ADD CONSTRAINT fk_report_cats
+        FOREIGN KEY (cat_id)
+            REFERENCES cats (id);
+ALTER TABLE reports
+    ADD CONSTRAINT fk_report_dogs
+        FOREIGN KEY (dog_id)
+            REFERENCES dogs (id);
 -- ALTER TABLE cats_shelter
 --     ADD CONSTRAINT fk_cats_shelter
 --         FOREIGN KEY (cats)

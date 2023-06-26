@@ -3,6 +3,7 @@ package com.example.shelterbot.handlers;
 import com.example.shelterbot.message.ShelterMessageImpl;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -10,15 +11,35 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Обработчик чата для связи между пользователем и волонтером.
+ * Позволяет пользователю вызвать волонтера и начать переписку с ним.
+ * Также позволяет волонтеру отправлять сообщения пользователю и наоборот.
+ */
 @Component
 @Order(6)
 public class ChatHandler extends DefaultHandler{
 
+    /**
+     * Хэшмапа для хранения связи между пользователем и волонтером.
+     * Ключ - айди пользователя, значение - айди волонтера.
+     */
     static Map<Long, Long> chat = new HashMap<>();
+
+    /**
+     * Конструктор класса.
+     * @param telegramBot объект TelegramBot для отправки сообщений.
+     * @param shelterMessage объект ShelterMessageImpl для работы с сообщениями.
+     */
     public ChatHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
         super(telegramBot, shelterMessage);
     }
 
+    /**
+     * Метод для проверки, применим ли данный обработчик к переданному обновлению.
+     * @param update объект Update для проверки.
+     * @return true, если данный обработчик применим к переданному обновлению, иначе false.
+     */
     @Override
     public boolean appliesTo(Update update) {
         boolean isReport = false;
@@ -29,27 +50,35 @@ public class ChatHandler extends DefaultHandler{
             isCallBackQueryEqualsVolunteer = update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER);
         }
 
-        return isCallBackQueryEqualsVolunteer || isReport ;
+        return isCallBackQueryEqualsVolunteer || !isReport ;
     }
 
+    /**
+     * Метод для обработки переданного обновления.
+     * Если пользователь вызвал волонтера, назначается свободный волонтер и записывается связь в хэшмапу.
+     * Если пользователь или волонтер отправил текст, сообщение пересылается соответствующему собеседнику.
+     * @param update объект Update для обработки.
+     */
     @Override
     public void handleUpdate(Update update) {
 //        Если пользователь нажал позвать волонтера назначаем ему волонтера
 //        и записываем связь в Хэшмапу где ключ айди пользователя а значение айди волонтера
-        if (update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER)) {
+        if (update.callbackQuery()!=null) {
+            if (update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER)){
 //            todo добавить назначение свободного волонтера
-            var volunteerID = 493667033L;
-            var userID = update.callbackQuery().from().id();
-            chat.put(userID, volunteerID);
-            var userName = update.callbackQuery().from().firstName();
+                var volunteerID = 493667033L;
+                var userID = update.callbackQuery().from().id();
+                chat.put(userID, volunteerID);
+                var userName = update.callbackQuery().from().firstName();
 
-            SendMessage sendMessageToVolunteer = new SendMessage(
-                    volunteerID,
-                    "Пользователю " + userName + " нужна помощь, напишите приветсвенное сообщения для начала переписки");
-            telegramBot.execute(sendMessageToVolunteer);
+                SendMessage sendMessageToVolunteer = new SendMessage(
+                        volunteerID,
+                        "Пользователю " + userName + " нужна помощь, напишите приветсвенное сообщения для начала переписки");
+                telegramBot.execute(sendMessageToVolunteer);
 
-            SendMessage sendMessageToUser = new SendMessage(userID, "Вам назначен волонтер, скоро он с Вами свяжется");
-            telegramBot.execute(sendMessageToUser);
+                SendMessage sendMessageToUser = new SendMessage(userID, "Вам назначен волонтер, скоро он с Вами свяжется");
+                telegramBot.execute(sendMessageToUser);
+            }
 
 //            Если пользователь отправил текст в бота проверяем есть ли связь с волотером,
 //            отправляем сообщение волотеру
@@ -77,11 +106,13 @@ public class ChatHandler extends DefaultHandler{
 
 //                Если в хэшмапе не найдена связь отправляется сообщение
             } else {
-                SendMessage sendMessage = new SendMessage(update.message().chat().id(), """
+                String msg = """
                         Вам не назначен волнтер для связи,
                         нажмите в меню позвать волонтера и после
-                        этого сможете переписываться с сотрудниками приюта""");
-                telegramBot.execute(sendMessage);
+                        этого сможете переписываться с сотрудниками приюта""";
+                InlineKeyboardMarkup menu = shelterMessage.keyboards(CALL_A_VOLUNTEER);
+                var chatId = update.message().chat().id();
+                shelterMessage.sendButtonMessage(chatId, telegramBot, msg, menu);
             }
         }
     }

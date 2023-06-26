@@ -1,5 +1,6 @@
 package com.example.shelterbot.model;
 
+import com.example.shelterbot.model.enums.PetType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class User {
     private String phoneNum;
     private String address;
     private LocalDateTime trialPeriod;
-    private String animal;
-    private Long petID;
+    @OneToOne
+    private Cats cat;
+    @OneToOne
+    private Dogs dog;
 
 }

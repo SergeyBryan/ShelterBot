@@ -46,18 +46,16 @@ public class ReportHandler extends AbstractHandler {
                     .equals("/" + PET_REPORT);
 
         } else if (update.message() != null) {
-            return update
-                    .message()
-                    .text()
-                    .toLowerCase()
-                    .startsWith("отчет");
+            if (update.message().text() != null) {
+                return update.message().text().toLowerCase().startsWith("отчет");
+            }
+            return update.message().photo() != null;
         }
         return false;
     }
 
     @Override
     public void handleUpdate(Update update) {
-
         if (update.message() == null) {
             var chatId = update.callbackQuery().from().id();
             SendMessage sendMessage = new SendMessage(chatId, EXAMPLE_REPORT);

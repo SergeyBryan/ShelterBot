@@ -24,17 +24,22 @@ public class Report {
     @OneToOne()
     private User userOwner;
 
-    @Column(name = "pet_id")
-    private Long petId;
+    @OneToOne
+    @JoinColumn(name = "cat_id")
+    private Cats catId;
+    @OneToOne
+    @JoinColumn(name = "dog_id")
+    private Dogs dogId;
 
     public Report() {
     }
 
-    public Report(String petPhoto, String text, User userOwner, Long petId) {
+    public Report(String petPhoto, String text, User userOwner, Cats cat, Dogs dog) {
         this.petPhoto = petPhoto;
         this.text = text;
         this.userOwner = userOwner;
-        this.petId = petId;
+        this.catId = cat;
+        this.dogId = dog;
     }
 
     public Long getId() {
@@ -77,11 +82,19 @@ public class Report {
         this.userOwner = userOwner;
     }
 
-    public Long getPetId() {
-        return petId;
+    public Cats getCatId() {
+        return catId;
     }
 
-    public void setPetId(Long petId) {
-        this.petId = petId;
+    public void setCatId(Cats catId) {
+        this.catId = catId;
+    }
+
+    public Dogs getDogId() {
+        return dogId;
+    }
+
+    public void setDogId(Dogs dogId) {
+        this.dogId = dogId;
     }
 }

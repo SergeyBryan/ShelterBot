@@ -75,21 +75,36 @@ class StartHandlerTest {
         when(update.message()).thenReturn(message);
         when(update.message().chat()).thenReturn(chat);
         when(update.message().chat().id()).thenReturn(chatId);
+        when(update.message().chat().firstName()).thenReturn(firstName);
         when(update.message().from()).thenReturn(mock(User.class));
         when(update.message().from().firstName()).thenReturn(firstName);
         when(shelterMessage.keyboards(anyString(), anyString())).thenReturn(keyboardMarkup);
         when(userService.getUserByChatId(any())).thenReturn(null);
         startHandler.handleUpdate(update);
 
-        verify(shelterMessage).sendButtonMessage(
-                                                eq(chatId),
-                                                eq(telegramBot),
-                                                eq(helloMsg),
-                                                eq(keyboardMarkup));
+        verify(shelterMessage).sendButtonMessage(eq(chatId), eq(telegramBot), eq(helloMsg), eq(keyboardMarkup));
     }
 
     @Test
     void handleUpdate_withStartCommand_shouldSendWelcomeMessageForUser() {
+        var chatId = 123L;
+        String firstName = "John";
+        String helloMsg = "Привет " + firstName + ". Я помогу тебе выбрать приют";
+        InlineKeyboardMarkup keyboardMarkup = mock(InlineKeyboardMarkup.class);
+        Message message = mock(Message.class);
+        Update update = mock(Update.class);
+        Chat chat = mock(Chat.class);
 
+        when(update.message()).thenReturn(message);
+        when(update.message().chat()).thenReturn(chat);
+        when(update.message().chat().id()).thenReturn(chatId);
+        when(update.message().chat().firstName()).thenReturn(firstName);
+        when(update.message().from()).thenReturn(mock(User.class));
+        when(update.message().from().firstName()).thenReturn(firstName);
+        when(shelterMessage.keyboards(anyString(), anyString())).thenReturn(keyboardMarkup);
+        when(userService.getUserByChatId(any())).thenReturn(mock(com.example.shelterbot.model.User.class));
+        startHandler.handleUpdate(update);
+
+        verify(shelterMessage).sendButtonMessage(eq(chatId), eq(telegramBot), eq(helloMsg), eq(keyboardMarkup));
     }
 }

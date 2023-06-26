@@ -9,6 +9,7 @@ import com.example.shelterbot.service.UserService;
 import com.pengrad.telegrambot.model.Message;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,19 +48,44 @@ public class ReportsServiceImpl implements ReportsService {
 
     /**
      * Сохраняет отчет на основе сообщения пользователя сприсланным отчетом.
+     *
      * @param message сообщение пользователя
-     * @return сохраненный отчет
      */
     @Override
-    public Report save(Message message) {
-        Long chatId = message.chat().id();
-        String pathToPhoto = savePhoto(message);
-        String text = message.text();
-
+    public void save(Message message) {
+        var chatId = message.chat().id();
         User user = userService.getUserByChatId(String.valueOf(chatId));
-        Report report = new Report(pathToPhoto, text, user, user.getPetID());
+        String pathToPhoto = null;
+
+        if (message.photo() != null) {
+            pathToPhoto = savePhoto(message);
+
+            var toDayReportByUser = reportsRepository.getAllByUserOwnerId(chatId)
+                    .stream()
+                    .filter(e -> e.getCreatedTime().toLocalDate().equals(LocalDate.now()))
+                    .findFirst();
+            if (toDayReportByUser.isPresent()) {
+                var report = toDayReportByUser.get();
+                var photoFromDB = report.getPetPhoto();
+                var reportID = report.getId();
+
+                if (photoFromDB == null) {
+                    reportsRepository.updatePhoto(pathToPhoto, reportID);
+                } else {
+                    pathToPhoto += " " + photoFromDB;
+                    reportsRepository.updatePhoto(pathToPhoto, reportID);
+                }
+                return;
+            }
+        }
+        if (message.text() == null) {
+            return;
+        }
+        var text = message.text();
+
+        Report report = new Report(pathToPhoto, text, user, user.getCat(), user.getDog());
         report.setCreatedTime(LocalDateTime.now());
-        return save(report);
+        save(report);
     }
 
     /**
@@ -78,7 +104,7 @@ public class ReportsServiceImpl implements ReportsService {
      */
     @Override
     public Report getByUserId(Long id) {
-        return reportsRepository.getByUserOwner_Id(id);
+        return reportsRepository.getByUserOwnerId(id);
     }
 
     /**

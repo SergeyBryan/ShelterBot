@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
         // todo пока обрабатывается только одно фото, необходимо реальзовать возможность принимать альбом
         logger.info("В метод saveImage передано: " + message.photo().length + " фотографий");
 
-        String fileId = message.photo()[0].fileId();
+        String fileId = message.photo()[message.photo().length - 1].fileId();
         GetFile request = new GetFile(fileId);
         GetFileResponse getFileResponse = telegramBot.execute(request);
         File file = getFileResponse.file();

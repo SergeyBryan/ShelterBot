@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@ToString
 @Order(3)
 public class InfoHandler extends AbstractHandler {
 
