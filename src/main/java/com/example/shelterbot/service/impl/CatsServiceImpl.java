@@ -25,7 +25,7 @@ public class CatsServiceImpl implements CatsService {
     }
 
     @Override
-    public Cats getById(int id) throws NotFoundException {
+    public Cats getById(long id) throws NotFoundException {
         Optional<Cats> optionalCats =  catsRepository.findById(id);
         if (optionalCats.isPresent()) {
             return optionalCats.get();

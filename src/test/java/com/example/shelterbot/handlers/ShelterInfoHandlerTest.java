@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +39,7 @@ class ShelterInfoHandlerTest {
         CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
         Update update = Mockito.mock(Update.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/information");
+        when(callbackQuery.data()).thenReturn("/Информация о приюте");
         assertTrue(handler.appliesTo(update));
     }
 
@@ -58,7 +59,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/back_menu");
+        when(callbackQuery.data()).thenReturn("/Вернуться в информационное меню");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -75,7 +76,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/information");
+        when(callbackQuery.data()).thenReturn("/Информация о приюте");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -94,14 +95,23 @@ class ShelterInfoHandlerTest {
         File file = Mockito.mock(File.class);
         SendPhoto sendPhoto = Mockito.mock(SendPhoto.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/schedule");
+        when(callbackQuery.data()).thenReturn("/Расписание о приюте");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
         when(shelterMessage.keyboards(any())).thenReturn(backMenu);
         when(file.toURI()).thenReturn(Path.of("src/main/resources/photo.jpg").toUri());
         handler.handleUpdate(update);
-        verify(telegramBot).execute(sendPhoto);
+
+//        verify(telegramBot).execute(sendPhoto);
+
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            boolean a = parameters.get("chat_id").equals(123L);
+            boolean b = parameters.get("photo").equals("C:\\Users\\user\\IdeaProjects\\ShelterBot\\src\\main\\resources\\photo.jpg");
+            boolean c = parameters.get("caption").equals("Схема проезда до нашего приюта");
+            return  a && b && c;
+        }));
         verify(shelterMessage).sendButtonMessage(123L, telegramBot, ShelterInfoEnum.SCHEDULE_TEXT.getText(), backMenu);
     }
 
@@ -113,7 +123,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/pass");
+        when(callbackQuery.data()).thenReturn("/Оформить пропуск на машину");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -130,7 +140,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/security");
+        when(callbackQuery.data()).thenReturn("/Правила безопасности");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);
@@ -147,7 +157,7 @@ class ShelterInfoHandlerTest {
         Update update = Mockito.mock(Update.class);
         InlineKeyboardMarkup backMenu = Mockito.mock(InlineKeyboardMarkup.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(callbackQuery.data()).thenReturn("/personal_info");
+        when(callbackQuery.data()).thenReturn("/Оставить контактные данные");
         when(callbackQuery.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123L);

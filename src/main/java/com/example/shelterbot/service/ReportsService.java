@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReportsService {
     Report save(Report report);
 
-    Report save(Message message);
+    void save(Message message);
 
     List<Report> getAll();
 

@@ -1,7 +1,6 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
-import com.example.shelterbot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +27,35 @@ public abstract class AbstractHandler implements TelegramHandler {
     protected static final String PET_REPORT = "Прислать отчет о питомце";
     protected static final String CALL_A_VOLUNTEER = "Позвать волонтера";
     protected static final String BACK = "Назад";
-    protected static final List<String> MENU_LIST = (List.of(INFO, HOW_TO_TAKE_A_PET,
-//            PET_REPORT,
-            CALL_A_VOLUNTEER));
-
     protected static final String INFORMATION = "Информация о приюте";
     protected static final String BACK_MENU = "Вернуться в информационное меню";
     protected static final String SCHEDULE = "Расписание о приюте";
     protected static final String PASS = "Оформить пропуск на машину";
     protected static final String SECURITY = "Правила безопасности";
-    protected static final String PERSONAL_INFO = "Оставить контактные данные";
-    protected static final List<String> ASSISTANCE_LIST = List.of(INFORMATION, SCHEDULE, PASS, SECURITY, PERSONAL_INFO, BACK_MENU);
+    protected static final String PUT_CONTACTS = "Оставить контактные данные";
+    protected static final List<String> ASSISTANCE_LIST = List.of(INFORMATION, SCHEDULE, PASS, SECURITY, PUT_CONTACTS, BACK_MENU);
+    protected static final String INSTRUCTION_MEETING = "Правила знакомства с животным";
+    protected static final String DOC_LIST = "Список документов";
+    protected static final String TRANSPORTATION = "Транспортировка";
+    protected static final String HOUSE_RECOM_FOR_PUPPY = "Обустр. дома щенок";
+    protected static final String HOUSE_RECOM_FOR_KITY = "Обустр. дома котенок";
+    protected static final String HOUSE_RECOM_FOR_ADULT = "Обустр. дома взрослый";
+    protected static final String HOUSE_RECOM_FOR_INVALID = "Обустр. дома инвалид";
+    protected static final String RECOM_FROM_CYNOLOGIST = "Советы кинолога";
+    protected static final String CYNOLOGIST_LIST = "Список кинологов";
+    protected static final String RESTRICTIONS = "Список причин отказа";
+
+    protected static final List<String> INSTRUCTION_LIST = List.of( INSTRUCTION_MEETING,
+                                                                    DOC_LIST,
+                                                                    TRANSPORTATION,
+                                                                    HOUSE_RECOM_FOR_PUPPY,
+                                                                    HOUSE_RECOM_FOR_ADULT,
+                                                                    HOUSE_RECOM_FOR_INVALID,
+                                                                    RECOM_FROM_CYNOLOGIST,
+                                                                    CYNOLOGIST_LIST,
+                                                                    RESTRICTIONS,
+                                                                    PUT_CONTACTS,
+                                                                    BACK_MENU);
 
 
     protected TelegramBot telegramBot;

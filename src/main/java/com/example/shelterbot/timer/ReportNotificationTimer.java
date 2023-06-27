@@ -35,7 +35,7 @@ public class ReportNotificationTimer {
                     report.getCreatedTime().toLocalDate().equals(LocalDateTime.now().toLocalDate().minusDays(1))
             ) {
                 System.out.println("Нашёлся");
-                shelterMessage.sendMessage(Long.parseLong(report.getUserOwner().getChatId()), telegramBot, "Вы не отправили отчёт");
+                shelterMessage.sendMessage(report.getUserOwner().getChatId(), telegramBot, "Вы не отправили отчёт");
             } else {
                 System.out.println("не нашёлся");
             }

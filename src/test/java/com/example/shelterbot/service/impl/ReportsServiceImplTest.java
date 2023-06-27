@@ -1,7 +1,6 @@
 package com.example.shelterbot.service.impl;
 
 import com.example.shelterbot.model.Report;
-import com.example.shelterbot.model.User;
 import com.example.shelterbot.repository.ReportsRepository;
 import com.example.shelterbot.service.FileService;
 import com.example.shelterbot.service.UserService;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +63,7 @@ public class ReportsServiceImplTest {
     @Test
     public void testGetByUserId() {
         Report report = new Report();
-        when(reportsRepository.getByUserOwner_Id(any())).thenReturn(report);
+        when(reportsRepository.getByUserOwnerId(any())).thenReturn(report);
 
         Report foundReport = reportsService.getByUserId(1L);
 
