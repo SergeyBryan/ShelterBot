@@ -12,6 +12,7 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +29,7 @@ public class FileServiceImpl implements FileService {
      * Путь к папке, в которой будут сохраняться изображения
      */
     @Value("${path.to.file.folder}")
-    private static String filePath;
+    private String filePath;
 
     /**
      * Логгер для записи действий и ошибок в лог-файл
@@ -63,7 +64,8 @@ public class FileServiceImpl implements FileService {
         GetFileResponse getFileResponse = telegramBot.execute(request);
         File file = getFileResponse.file();
 
-        String fileName = file.fileUniqueId();
+
+        String fileName = file.fileUniqueId() + "." + StringUtils.getFilenameExtension(file.filePath());
         Path path = Path.of(filePath, fileName);
 
         try {

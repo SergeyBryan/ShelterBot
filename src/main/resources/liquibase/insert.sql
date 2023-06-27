@@ -30,6 +30,10 @@ VALUES (2, 'dogtest2', 2, 1);
 insert into volunteer (id, name, chat_id, phone_num)
 VALUES (1, 'test', 493667033, 'testphone_num');
 
+-- SELECT *
+-- FROM reports
+-- WHERE user_owner_id = 1
+--   AND created_time::date = CURRENT_DATE;
 
 
 
