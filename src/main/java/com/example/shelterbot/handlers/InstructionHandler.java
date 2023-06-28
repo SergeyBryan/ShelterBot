@@ -15,12 +15,14 @@ import org.springframework.stereotype.Component;
 public class InstructionHandler extends AbstractHandler {
 
     private final ChatHandler chatHandler;
+    private final MenuHandler menuHandler;
     private boolean isFirstMenuSelection;
     private boolean ifSecondMenuSelection;
 
-    public InstructionHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, ChatHandler chatHandler) {
+    public InstructionHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, ChatHandler chatHandler, MenuHandler menuHandler) {
         super(telegramBot, shelterMessage);
         this.chatHandler = chatHandler;
+        this.menuHandler = menuHandler;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class InstructionHandler extends AbstractHandler {
 
     private void secondSelectionMenu(Update update, String data, long chatId) {
         InlineKeyboardMarkup backMenu = shelterMessage.keyboards(BACK_MENU);
-        PetType flag = MenuHandler.flag.get(chatId);
+        PetType flag = menuHandler.flag.get(chatId);
         if (flag == PetType.CAT) {
             switch (data) {
                 case "/" + INSTRUCTION_MEETING ->
@@ -97,7 +99,7 @@ public class InstructionHandler extends AbstractHandler {
                                                                 RESTRICTIONS,
                                                                 CALL_A_VOLUNTEER,
                                                                 BACK);
-        PetType flag = MenuHandler.flag.get(chatId);
+        PetType flag = menuHandler.flag.get(chatId);
         if (flag == PetType.CAT) {
             shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", catMenu);
         } else if (flag == PetType.DOG) {

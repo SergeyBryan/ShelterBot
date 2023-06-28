@@ -27,7 +27,7 @@ public class ChatHandler extends DefaultHandler{
      * Хэшмапа для хранения связи между пользователем и волонтером.
      * Ключ - айди пользователя, значение - айди волонтера.
      */
-    static Map<Long, Long> chat = new HashMap<>();
+    final Map<Long, Long> chat = new HashMap<>();
 
     static Queue<Volunteer> volunteerQueue = new LinkedList<>();
 

@@ -19,7 +19,8 @@ import java.util.Map;
 @Component
 @Order(2)
 public class MenuHandler extends AbstractHandler {
-    public static Map<Long, PetType> flag = new HashMap<>();
+
+    final Map<Long, PetType> flag = new HashMap<>();
 
 
     /**
