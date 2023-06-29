@@ -20,4 +20,6 @@ public interface UserService {
     boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException;
 
     void deleteUser(long userid);
+
+    List<User> getAllAdoptedPetUser();
 }
