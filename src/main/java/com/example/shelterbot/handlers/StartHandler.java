@@ -6,6 +6,7 @@ import com.example.shelterbot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(1)
+@Slf4j
 public class StartHandler extends AbstractHandler {
 
     private final UserService userService;
@@ -38,6 +40,7 @@ public class StartHandler extends AbstractHandler {
      */
     @Override
     public boolean appliesTo(Update update) {
+        log.info("Processing appliesTo StartHandler: {}", update);
         if (update.callbackQuery() == null) {
             return update.message().text() != null && update.message().text().equals("/start");
         } else {
@@ -55,9 +58,7 @@ public class StartHandler extends AbstractHandler {
         long chatId = update.message().chat().id();
         var userName = update.message().chat().firstName();
         InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Приют для кошек", "Приют для собак");
-
         User userByChatId = userService.getUserByChatId(chatId);
-
         if (userByChatId != null) {
             shelterMessage.sendButtonMessage(
                                             chatId,

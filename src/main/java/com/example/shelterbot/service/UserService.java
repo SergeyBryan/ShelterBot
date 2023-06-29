@@ -18,4 +18,6 @@ public interface UserService {
     User getUserByChatId(long chatId);
 
     boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException;
+
+    void deleteUser(long userid);
 }

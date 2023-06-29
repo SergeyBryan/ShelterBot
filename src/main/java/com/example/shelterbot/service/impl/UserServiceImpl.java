@@ -121,4 +121,9 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public void deleteUser(long userid) {
+        userRepository.deleteById(userid);
+    }
 }

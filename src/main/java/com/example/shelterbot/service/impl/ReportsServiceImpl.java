@@ -9,7 +9,6 @@ import com.example.shelterbot.service.UserService;
 import com.pengrad.telegrambot.model.Message;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,36 +55,35 @@ public class ReportsServiceImpl implements ReportsService {
         var chatId = message.chat().id();
         User user = userService.getUserByChatId(chatId);
         String pathToPhoto = null;
+        String text = null;
 
+        if (message.text() != null) {
+            text = message.text();
+        } else if (message.caption() != null) {
+            text = message.caption();
+        }
         if (message.photo() != null) {
             pathToPhoto = savePhoto(message);
+        }
 
-            var toDayReportByUser = reportsRepository.getAllByUserOwnerId(chatId)
-                    .stream()
-                    .filter(e -> e.getCreatedTime().toLocalDate().equals(LocalDate.now()))
-                    .findFirst();
-            if (toDayReportByUser.isPresent()) {
-                var report = toDayReportByUser.get();
-                var photoFromDB = report.getPetPhoto();
-                var reportID = report.getId();
-
-                if (photoFromDB == null) {
-                    reportsRepository.updatePhoto(pathToPhoto, reportID);
-                } else {
-                    pathToPhoto += " " + photoFromDB;
-                    reportsRepository.updatePhoto(pathToPhoto, reportID);
-                }
-                return;
+        var report = reportsRepository.getToDayReportByUserChatId(chatId);
+        if (report!=null) {
+            var photoFromDB = report.getPetPhoto();
+            var reportID = report.getId();
+            if (photoFromDB == null) {
+                reportsRepository.updatePhoto(pathToPhoto, reportID);
+            } else {
+                pathToPhoto += " " + photoFromDB;
+                reportsRepository.updatePhoto(pathToPhoto, reportID);
             }
+            if (report.getText() == null) {
+                reportsRepository.updateText(text, reportID);
+            }
+        } else {
+            Report reportToSave = new Report(pathToPhoto, text, user, user.getCat(), user.getDog());
+            reportToSave.setCreatedTime(LocalDateTime.now());
+            save(reportToSave);
         }
-        if (message.text() == null) {
-            return;
-        }
-        var text = message.text();
-
-        Report report = new Report(pathToPhoto, text, user, user.getCat(), user.getDog());
-        report.setCreatedTime(LocalDateTime.now());
-        save(report);
     }
 
     /**
@@ -116,5 +114,16 @@ public class ReportsServiceImpl implements ReportsService {
     public String savePhoto(Message message) {
         return fileService.saveImage(message);
     }
+
+    @Override
+    public List<Report> getAllUncheckedReports() {
+        return reportsRepository.getAllByIsCheckedIsFalse();
+    }
+
+    @Override
+    public void checkReport(long reportID) {
+        reportsRepository.updateIsChecked(reportID);
+    }
+
 
 }

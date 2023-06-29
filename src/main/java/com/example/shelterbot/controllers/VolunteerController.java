@@ -11,9 +11,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -38,6 +39,43 @@ public class VolunteerController {
     })
     public ResponseEntity<Report> getReportByUserId(@PathVariable long id) {
         return ResponseEntity.ok(volunteerService.getReportByUserId((int) id));
+    }
+
+    @GetMapping("all_unchecked_reports")
+    @Operation(summary = "Получение всех непроверенных отчетов.",
+            description = "Получение всех непроверенных отчетов")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Запрос выполнен."),
+            @ApiResponse(responseCode = "400",
+                    description = "Некорректный формат запроса."),
+            @ApiResponse(responseCode = "500",
+                    description = "Произошла ошибка, не зависящая от вызывающей стороны.")
+    })
+    public ResponseEntity<List<Report>> getAllNotCheckedReport() {
+        return ResponseEntity.ok(volunteerService.getAllUncheckedReports());
+    }
+
+    @GetMapping("check_reports{reportID}")
+    @Operation(summary = "Отметить отчет как проверенный",
+            description = "Отметить отчет как проверенный по переданному ID",
+            parameters = {
+                    @Parameter(
+                            name = "reportID",
+                            description = "ID отчета который необхрдимо отметить как проверенный"
+                    )
+            })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Запрос выполнен."),
+            @ApiResponse(responseCode = "400",
+                    description = "Некорректный формат запроса."),
+            @ApiResponse(responseCode = "500",
+                    description = "Произошла ошибка, не зависящая от вызывающей стороны.")
+    })
+    public ResponseEntity<String> checkReport( @PathVariable long reportID) {
+        volunteerService.checkReport(reportID);
+        return ResponseEntity.ok("Отчет успешно проверен");
     }
 
     @PutMapping("/extend-trial-period")
@@ -121,6 +159,31 @@ public class VolunteerController {
 
         volunteerService.addPetToOwner(petid, dogOrCat, userid);
         return ResponseEntity.ok("Питомец успешно закреплен за пользоватлем ");
+    }
+
+    @PutMapping("/add-volunteer")
+    @Operation(
+            summary = "Добавить новвого волонтера",
+            description = "При добавлении волонтера необходимо чтобы он был зарегестрирован как пользователь",
+            parameters = {
+                    @Parameter(
+                            name = "userid",
+                            description = "Необходимо указать айди пользователя",
+                            example = "1"
+                    )
+            })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200",
+                            description = "Запрос выполнен."),
+                    @ApiResponse(responseCode = "400",
+                            description = "Некорректный формат запроса."),
+                    @ApiResponse(responseCode = "500",
+                            description = "Произошла ошибка, не зависящая от вызывающей стороны.")
+            })
+    public ResponseEntity<String> addVolunteer(@RequestParam long userid) throws NotFoundException {
+        volunteerService.addVolunteer(userid);
+        return ResponseEntity.ok("Пользователь успешно добвлен как пользователь ");
     }
 
 }

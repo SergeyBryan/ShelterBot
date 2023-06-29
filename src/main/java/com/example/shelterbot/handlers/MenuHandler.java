@@ -5,6 +5,7 @@ import com.example.shelterbot.model.enums.PetType;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 @Component
 @Order(2)
+@Slf4j
 public class MenuHandler extends AbstractHandler {
 
     final Map<Long, PetType> flag = new HashMap<>();
@@ -42,6 +44,7 @@ public class MenuHandler extends AbstractHandler {
      */
     @Override
     public boolean appliesTo(Update update) {
+        log.info("Processing appliesTo MenuHandler: {}", update);
         if (update.callbackQuery() != null) {
             return (update.callbackQuery().data().equals("/" + BACK)) ||
                     (update.callbackQuery().data().equals("/" + CAT_SHELTER) || update.callbackQuery().data().equals("/" + DOG_SHELTER));
@@ -63,14 +66,7 @@ public class MenuHandler extends AbstractHandler {
         } else if (update.callbackQuery().data().equals("/" + DOG_SHELTER)) {
             flag.put(chatId, PetType.DOG);
         }
-
         InlineKeyboardMarkup keyboardMarkup = shelterMessage.keyboards(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER);
-//        if (update.message() == null) {
         shelterMessage.sendButtonMessage(chatId, telegramBot, MENU, keyboardMarkup);
-//        }
-//        else {
-//            chatId = update.message().chat().id();
-//            shelterMessage.sendButtonMessage(chatId, telegramBot, MENU, keyboardMarkup);
-//        }
     }
 }

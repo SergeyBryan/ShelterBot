@@ -31,6 +31,9 @@ public class Report {
     @JoinColumn(name = "dog_id")
     private Dogs dogId;
 
+    @Column(name = "is_checked")
+    private boolean isChecked;
+
     public Report() {
     }
 
@@ -96,5 +99,26 @@ public class Report {
 
     public void setDogId(Dogs dogId) {
         this.dogId = dogId;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+                ", createdTime=" + createdTime +
+                ", petPhoto='" + petPhoto + '\'' +
+                ", text='" + text + '\'' +
+                ", userOwner=" + userOwner +
+                ", catId=" + catId +
+                ", dogId=" + dogId +
+                '}';
     }
 }

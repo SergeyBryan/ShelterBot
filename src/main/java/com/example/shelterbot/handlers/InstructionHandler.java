@@ -6,12 +6,14 @@ import com.example.shelterbot.model.enums.PetType;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @Order(7)
+@Slf4j
 public class InstructionHandler extends AbstractHandler {
 
     private final ChatHandler chatHandler;
@@ -27,6 +29,7 @@ public class InstructionHandler extends AbstractHandler {
 
     @Override
     public boolean appliesTo(Update update) {
+        log.info("Processing appliesTo InstructionHandler: {}", update);
         if (update.callbackQuery() != null) {
             String data = update.callbackQuery().data();
             isFirstMenuSelection = data.equals("/" + HOW_TO_TAKE_A_PET);

@@ -4,18 +4,19 @@ import com.example.shelterbot.message.ShelterMessage;
 import com.example.shelterbot.model.Report;
 import com.example.shelterbot.repository.ReportsRepository;
 import com.pengrad.telegrambot.TelegramBot;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Slf4j
 public class ReportNotificationTimer {
-    ReportsRepository repository;
-    ShelterMessage shelterMessage;
-    TelegramBot telegramBot;
+    private final ReportsRepository repository;
+    private final  ShelterMessage shelterMessage;
+    private final TelegramBot telegramBot;
 
     public ReportNotificationTimer(ReportsRepository repository, ShelterMessage shelterMessage, TelegramBot telegramBot) {
         this.repository = repository;
@@ -29,15 +30,13 @@ public class ReportNotificationTimer {
     }
 
     public void checkDate() {
-        List<Report> reportList = repository.findAll();
+        List<Report> reportList = repository.getAllByIsCheckedIsFalse();
         for (Report report : reportList) {
-            if (
-                    report.getCreatedTime().toLocalDate().equals(LocalDateTime.now().toLocalDate().minusDays(1))
-            ) {
-                System.out.println("Нашёлся");
-                shelterMessage.sendMessage(report.getUserOwner().getChatId(), telegramBot, "Вы не отправили отчёт");
+            if (report.isChecked()) {
+                log.info("Processing checkDate ReportNotificationTimer " + report);
             } else {
-                System.out.println("не нашёлся");
+                log.info("Отчет не проверен, будет отправлено уведомление пользователю: " + report.getUserOwner());
+                shelterMessage.sendMessage(report.getUserOwner().getChatId(), telegramBot, "Вы не отправили отчёт");
             }
         }
     }

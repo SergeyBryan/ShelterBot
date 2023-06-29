@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.*;
  */
 @Component
 @Order(6)
+@Slf4j
 public class ChatHandler extends DefaultHandler{
 
     private final VolunteerService volunteerService;
@@ -57,7 +59,7 @@ public class ChatHandler extends DefaultHandler{
         } else if (update.callbackQuery() != null) {
             isCallBackQueryEqualsVolunteer = update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER);
         }
-
+        log.info("Processing appliesTo ChatHandler: {}", update);
         return isCallBackQueryEqualsVolunteer || !isReport ;
     }
 
