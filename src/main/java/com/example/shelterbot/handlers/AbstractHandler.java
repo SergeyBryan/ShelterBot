@@ -49,6 +49,7 @@ public abstract class AbstractHandler implements TelegramHandler {
                                                                     DOC_LIST,
                                                                     TRANSPORTATION,
                                                                     HOUSE_RECOM_FOR_PUPPY,
+                                                                    HOUSE_RECOM_FOR_KITY,
                                                                     HOUSE_RECOM_FOR_ADULT,
                                                                     HOUSE_RECOM_FOR_INVALID,
                                                                     RECOM_FROM_CYNOLOGIST,

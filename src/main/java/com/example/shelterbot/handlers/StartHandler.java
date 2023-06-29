@@ -40,8 +40,8 @@ public class StartHandler extends AbstractHandler {
      */
     @Override
     public boolean appliesTo(Update update) {
-        log.info("Processing appliesTo StartHandler: {}", update);
         if (update.callbackQuery() == null) {
+            log.info("Processing appliesTo StartHandler: {}", update.message().text() + " from " + update.message().from());
             return update.message().text() != null && update.message().text().equals("/start");
         } else {
             return false;

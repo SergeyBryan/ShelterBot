@@ -19,7 +19,7 @@ import java.util.*;
  * Также позволяет волонтеру отправлять сообщения пользователю и наоборот.
  */
 @Component
-@Order(6)
+@Order(7)
 @Slf4j
 public class ChatHandler extends DefaultHandler{
 
@@ -56,10 +56,11 @@ public class ChatHandler extends DefaultHandler{
         boolean isCallBackQueryEqualsVolunteer = false;
         if (update.message() != null) {
             isReport = update.message().text().toLowerCase().startsWith("отчет");
+            log.info("Processing appliesTo ChatHandler: {}", update.message());
         } else if (update.callbackQuery() != null) {
             isCallBackQueryEqualsVolunteer = update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER);
+            log.info("Processing appliesTo ChatHandler: {}", update.callbackQuery().data());
         }
-        log.info("Processing appliesTo ChatHandler: {}", update);
         return isCallBackQueryEqualsVolunteer || !isReport ;
     }
 

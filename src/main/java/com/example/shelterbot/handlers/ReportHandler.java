@@ -41,14 +41,15 @@ public class ReportHandler extends AbstractHandler {
 
     @Override
     public boolean appliesTo(Update update) {
-        log.info("Processing appliesTo ReportHandler: {}", update);
         if (update.callbackQuery() != null) {
+            log.info("Processing appliesTo ReportHandler: {}", update.callbackQuery().data());
             return update
                     .callbackQuery()
                     .data()
                     .equals("/" + PET_REPORT);
 
         } else if (update.message() != null) {
+            log.info("Processing appliesTo ReportHandler: {}", update.message());
             if (update.message().text() != null) {
                 return update.message().text().toLowerCase().startsWith("отчет");
             }

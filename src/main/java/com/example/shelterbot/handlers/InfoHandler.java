@@ -48,8 +48,8 @@ public class InfoHandler extends AbstractHandler {
      */
     @Override
     public boolean appliesTo(Update update) {
-        log.info("Processing appliesTo InfoHandler: {}", update);
         if (update.callbackQuery() != null) {
+            log.info("Processing appliesTo InfoHandler: {}", update.callbackQuery().data());
             return update.callbackQuery().data().equals("/" + INFO);
         }
         return false;
