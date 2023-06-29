@@ -1,37 +1,48 @@
 package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.handlers.text.InstructionsForCatsText;
+import com.example.shelterbot.handlers.text.InstructionsForDogsText;
 import com.example.shelterbot.message.ShelterMessageImpl;
 import com.example.shelterbot.model.enums.PetType;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Component
-@Order(7)
+@Order(6)
+@Slf4j
 public class InstructionHandler extends AbstractHandler {
 
     private final ChatHandler chatHandler;
-    private boolean isFirstMenuSelection;
-    private boolean ifSecondMenuSelection;
+    private final MenuHandler menuHandler;
 
-    public InstructionHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, ChatHandler chatHandler) {
+    final Map<Long, Boolean> selection = new HashMap<>();
+
+    public InstructionHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage, ChatHandler chatHandler, MenuHandler menuHandler) {
         super(telegramBot, shelterMessage);
         this.chatHandler = chatHandler;
+        this.menuHandler = menuHandler;
     }
 
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
+            log.info("Processing appliesTo InstructionHandler: {}", update.callbackQuery().data());
             String data = update.callbackQuery().data();
-            isFirstMenuSelection = data.equals("/" + HOW_TO_TAKE_A_PET);
-            ifSecondMenuSelection = INSTRUCTION_LIST.stream()
+            boolean isFirstMenuSelection = data.equals("/" + HOW_TO_TAKE_A_PET);
+            boolean ifSecondMenuSelection = INSTRUCTION_LIST.stream()
                     .map(s -> "/" + s)
                     .anyMatch(s -> s.equals(data));
 
+            selection.put(update.callbackQuery().from().id(), isFirstMenuSelection);
             return isFirstMenuSelection || ifSecondMenuSelection;
         }
         return false;
@@ -41,17 +52,18 @@ public class InstructionHandler extends AbstractHandler {
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();
         long chatId = update.callbackQuery().message().chat().id();
+        boolean isFirstMenuSelection = selection.get(chatId);
 
         if (isFirstMenuSelection) {
             firstMenuSelection(chatId);
-        } else if (ifSecondMenuSelection) {
+        } else  {
             secondSelectionMenu(update, data, chatId);
         }
     }
 
     private void secondSelectionMenu(Update update, String data, long chatId) {
         InlineKeyboardMarkup backMenu = shelterMessage.keyboards(BACK_MENU);
-        PetType flag = MenuHandler.flag.get(chatId);
+        PetType flag = menuHandler.flag.get(chatId);
         if (flag == PetType.CAT) {
             switch (data) {
                 case "/" + INSTRUCTION_MEETING ->
@@ -73,6 +85,28 @@ public class InstructionHandler extends AbstractHandler {
                 case "/" + BACK ->
                         firstMenuSelection(chatId);
             }
+        } else if (flag == PetType.DOG) {
+            switch (data) {
+                case "/" + INSTRUCTION_MEETING ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.RULES_BEFORE.getText(), backMenu);
+                case "/" + DOC_LIST ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.DOC_LIST.getText(), backMenu);
+                case "/" + TRANSPORTATION ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.RECOMMENDATION_FOR_TRANSPORTATION.getText(), backMenu);
+                case "/" + HOUSE_RECOM_FOR_KITY ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_PUPPY.getText(), backMenu);
+                case "/" + HOUSE_RECOM_FOR_ADULT ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_ADULT.getText(), backMenu);
+                case "/" + HOUSE_RECOM_FOR_INVALID ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_INVALID.getText(), backMenu);
+                case "/" + RESTRICTIONS ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.RESTRICTIONS.getText(), backMenu);
+                case "/" + CALL_A_VOLUNTEER -> chatHandler.handleUpdate(update);
+                case "/" + BACK -> firstMenuSelection(chatId);
+            }
+        } else {
+            SendMessage sendMessage = new SendMessage(chatId, "Вы не выбрали приют, вернитесь в стартовое меню и выбирете приют");
+            telegramBot.execute(sendMessage);
         }
     }
 
@@ -97,11 +131,14 @@ public class InstructionHandler extends AbstractHandler {
                                                                 RESTRICTIONS,
                                                                 CALL_A_VOLUNTEER,
                                                                 BACK);
-        PetType flag = MenuHandler.flag.get(chatId);
+        PetType flag = menuHandler.flag.get(chatId);
         if (flag == PetType.CAT) {
             shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", catMenu);
         } else if (flag == PetType.DOG) {
             shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", dogMenu);
+        } else {
+            SendMessage sendMessage = new SendMessage(chatId, "Вы не выбрали приют, вернитесь в стартовое меню и выбирете приют");
+            telegramBot.execute(sendMessage);
         }
 
     }

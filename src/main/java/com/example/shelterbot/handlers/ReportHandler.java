@@ -7,12 +7,14 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @Order(4)
+@Slf4j
 public class ReportHandler extends AbstractHandler {
 
     private final ReportsService reportsService;
@@ -40,12 +42,14 @@ public class ReportHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
+            log.info("Processing appliesTo ReportHandler: {}", update.callbackQuery().data());
             return update
                     .callbackQuery()
                     .data()
                     .equals("/" + PET_REPORT);
 
         } else if (update.message() != null) {
+            log.info("Processing appliesTo ReportHandler: {}", update.message());
             if (update.message().text() != null) {
                 return update.message().text().toLowerCase().startsWith("отчет");
             }
@@ -59,10 +63,8 @@ public class ReportHandler extends AbstractHandler {
         if (update.message() == null) {
             var chatId = update.callbackQuery().from().id();
             SendMessage sendMessage = new SendMessage(chatId, EXAMPLE_REPORT);
-
             byte[] photo = fileService.getImage(EXAMPLE_PHOTO);
             SendPhoto sendPhoto = new SendPhoto(chatId, photo);
-
             telegramBot.execute(sendMessage);
             telegramBot.execute(sendPhoto);
         } else {
