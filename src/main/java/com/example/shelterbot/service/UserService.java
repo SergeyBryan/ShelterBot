@@ -2,6 +2,7 @@ package com.example.shelterbot.service;
 
 import com.example.shelterbot.exceptions.NotFoundException;
 import com.example.shelterbot.model.User;
+import com.example.shelterbot.model.enums.PetType;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UserService {
 
     boolean extendTrialPeriod(int days, long id);
 
-    User getUserByChatId(String chatId);
+    User getUserByChatId(long chatId);
 
-    boolean addPetToOwner(long petId, String dogOrCat, String userId);
+    boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException;
 }

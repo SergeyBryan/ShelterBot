@@ -1,9 +1,12 @@
 package com.example.shelterbot.repository;
+import com.example.shelterbot.model.Cats;
+import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,9 +22,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u set u.petID = :petId, u.animal = :animal WHERE u.id = :id")
-    void addPetToOwner(long petId, String animal, String id);
+    @Query("UPDATE User u set u.dog = :dog WHERE u.id = :id")
+    void addDogToOwner(@Param("dog") Dogs dog,
+                       @Param("id")long id);
 
     @Transactional
-    User getUserByChatId(String chatId);
+    @Modifying
+    @Query("UPDATE User u set u.cat = :cat WHERE u.id = :id")
+    void addCatToOwner(@Param("cat") Cats cat,
+                       @Param("id")long id);
+
+
+
+    @Transactional
+    User getUserByChatId(long chatId);
 }

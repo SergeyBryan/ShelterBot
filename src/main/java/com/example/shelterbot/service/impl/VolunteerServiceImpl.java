@@ -5,6 +5,7 @@ import com.example.shelterbot.model.Cats;
 import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Report;
 import com.example.shelterbot.model.Volunteer;
+import com.example.shelterbot.model.enums.PetType;
 import com.example.shelterbot.repository.VolunteerRepository;
 import com.example.shelterbot.service.*;
 import org.springframework.stereotype.Service;
@@ -139,8 +140,8 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @return true, если операция выполнена успешно
      */
     @Override
-    public boolean addPetToOwner(long petId, String dogOrCat, long userId) {
-        userService.addPetToOwner(petId, dogOrCat, String.valueOf(userId));
+    public boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException {
+        userService.addPetToOwner(petId, dogOrCat, userId);
         return true;
     }
 

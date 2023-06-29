@@ -17,6 +17,8 @@ public class CatsShelter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
 //    @OneToMany(mappedBy = "shelter",
 //            fetch = FetchType.LAZY,
 //            cascade = CascadeType.ALL,

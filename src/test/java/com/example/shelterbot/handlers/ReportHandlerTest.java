@@ -1,112 +1,143 @@
 package com.example.shelterbot.handlers;
+
 import com.example.shelterbot.message.ShelterMessageImpl;
+import com.example.shelterbot.model.Report;
 import com.example.shelterbot.service.FileService;
+import com.example.shelterbot.service.ReportsService;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendPhoto;
-import org.junit.jupiter.api.Assertions;
+import com.pengrad.telegrambot.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 public class ReportHandlerTest {
 
     @Mock
-    private TelegramBot telegramBot;
-
+    ReportsService reportsService;
     @Mock
-    private ShelterMessageImpl shelterMessage;
-
+    TelegramBot telegramBot;
     @Mock
-    private FileService fileService;
+    ShelterMessageImpl shelterMessage;
+    @Mock
+    FileService fileService;
+    ReportHandler reportHandler;
 
-    @InjectMocks
-    private ReportHandler reportHandler;
+    private static final String EXAMPLE_REPORT = """
+            Важно! Сообщение должно начинаться со слова 'Отчет'
+            Пример отчета:
+            Отчет:
+            Рацион животного
+            Общее самочувствие и привыкание к новому месту
+            Изменение в поведении: отказ от старых привычек, приобретение новых""";
 
-    private static final String EXAMPLE_PHOTO = "src/main/resources/files/пример.jpeg";
-    private static final String EXAMPLE_DIET = "Рацион животного";
-    private static final String EXAMPLE_GENERAL_HEALTH = "Общее самочувствие и привыкание к новому месту";
-    private static final String EXAMPLE_BEHAVIOR_CHANGE = "Изменение в поведении: отказ от старых привычек, приобретение новых";
+    private static final String RESPONSE = "Отчет принят, после проверки отчета, если будут вопросы с Вами свяжуться";
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        reportHandler = new ReportHandler(reportsService, telegramBot, shelterMessage, fileService);
     }
 
     @Test
     public void appliesTo_withCallbackQueryAndCorrectData_returnsTrue() {
-        CallbackQuery callbackQuery = mock(CallbackQuery.class);
-        when(callbackQuery.data()).thenReturn("/pet_report");
         Update update = mock(Update.class);
+        CallbackQuery callbackQuery = mock(CallbackQuery.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
+        when(update.callbackQuery().data()).thenReturn("/Прислать отчет о питомце");
 
-        boolean result = reportHandler.appliesTo(update);
-
-        Assertions.assertFalse(result);
+        assertTrue(reportHandler.appliesTo(update));
     }
 
     @Test
-    public void appliesTo_withCallbackQueryAndIncorrectData_returnsFalse() {
-        CallbackQuery callbackQuery = mock(CallbackQuery.class);
-        when(callbackQuery.data()).thenReturn("/other_command");
+    public void appliesTo_withTextMessageAndCorrectText_returnsTrue() {
         Update update = mock(Update.class);
-        when(update.callbackQuery()).thenReturn(callbackQuery);
+        Message message = mock(Message.class);
+        when(update.message()).thenReturn(message);
+        when(message.text()).thenReturn("Отчет:");
 
-        boolean result = reportHandler.appliesTo(update);
-
-        Assertions.assertFalse(result);
+        assertTrue(reportHandler.appliesTo(update));
     }
 
     @Test
-    public void appliesTo_withMessage_returnsFalse() {
+    public void appliesTo_withTextMessageAndIncorrectText_returnsFalse() {
         Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        when(update.message()).thenReturn(message);
+        when(message.text()).thenReturn("Некорректный текст");
+
+        assertFalse(reportHandler.appliesTo(update));
+    }
+
+    @Test
+    public void handleUpdate_withCallbackQuery_sendsMessageAndPhoto() throws IOException {
+        var userID = 123L;
+        Update update = mock(Update.class);
+        CallbackQuery callbackQuery = mock(CallbackQuery.class);
+        User user = mock(User.class);
+        var examplePhoto = getImage();
+
         when(update.message()).thenReturn(null);
-
-        boolean result = reportHandler.appliesTo(update);
-
-        Assertions.assertFalse(result);
-    }
-
-    @Test
-    public void handleUpdate_withCallbackQuery_sendsMessageAndPhoto() {
-        CallbackQuery callbackQuery = mock(CallbackQuery.class);
-        when(callbackQuery.data()).thenReturn("/pet_report");
-        when(callbackQuery.from().id()).thenReturn(123L);
-        Update update = mock(Update.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
-
-        byte[] photo = new byte[]{1,2,3};
-        when(fileService.getImage(EXAMPLE_PHOTO)).thenReturn(photo);
+        when(update.callbackQuery().from()).thenReturn(user);
+        when(update.callbackQuery().from().id()).thenReturn(userID);
+        when(fileService.getImage(anyString())).thenReturn(examplePhoto);
 
         reportHandler.handleUpdate(update);
 
-        verify(telegramBot).execute(new SendMessage(123, "Важно! Сообщение должно начинаться со слова 'Отчет'\n Пример отчета:\n" +
-                "Отчет:\n" +
-                EXAMPLE_DIET + "\n" +
-                EXAMPLE_GENERAL_HEALTH + "\n" +
-                EXAMPLE_BEHAVIOR_CHANGE));
-        verify(telegramBot).execute(new SendPhoto(123, photo));
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            return parameters.containsKey("text")
+                    && parameters.get("chat_id").equals(userID)
+                    && parameters.get("text").equals(EXAMPLE_REPORT);
+
+        }));
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            return parameters.containsKey("photo")
+                    && parameters.get("chat_id").equals(userID)
+                    && parameters.get("photo").equals(examplePhoto);
+
+        }));
+
+
     }
 
     @Test
-    public void handleUpdate_withMessage_doesNothing() {
+    public void handleUpdate_withTextMessage_callsReportsServiceAndSendsMessage() {
+        var userID = 123L;
         Update update = mock(Update.class);
-        when(update.message()).thenReturn(mockMessage("some message"));
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
+
+        when(update.message()).thenReturn(message);
+        when(update.message().chat()).thenReturn(chat);
+        when(update.message().chat().id()).thenReturn(userID);
 
         reportHandler.handleUpdate(update);
 
-        verify(telegramBot, never()).execute(any());
+        verify(reportsService, times(1)).save(any(Message.class));
+        verify(telegramBot).execute(argThat(argument -> {
+            Map<String, Object> parameters = argument.getParameters();
+            return parameters.get("chat_id").equals(userID)
+                    && parameters.get("text").equals(RESPONSE);
+
+        }));
+
     }
 
-    private com.pengrad.telegrambot.model.Message mockMessage(String s) {
-        com.pengrad.telegrambot.model.Message message = mock(com.pengrad.telegrambot.model.Message.class);
-        when(message.text()).thenReturn(s);
-        return message;
+    private byte[] getImage() throws IOException {
+        java.io.File file = new java.io.File("src/main/resources/files/пример.jpeg");
+        return Files.readAllBytes(file.toPath());
     }
 }

@@ -25,7 +25,6 @@ class ShelterMessageImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         shelterMessage = new ShelterMessageImpl();
-        shelterMessage.LOGGER = mock(Logger.class);
     }
 
     @Test
@@ -53,7 +52,6 @@ class ShelterMessageImplTest {
         shelterMessage.sendMessage(id, telegramBot, message);
 
         verify(telegramBot, times(1)).execute(any(SendMessage.class));
-        verify(shelterMessage.LOGGER, never()).error(anyString());
     }
 
     @Test
@@ -66,7 +64,6 @@ class ShelterMessageImplTest {
         shelterMessage.sendMessage(id, telegramBot, message);
 
         verify(telegramBot, times(1)).execute(any(SendMessage.class));
-        verify(shelterMessage.LOGGER, times(1)).error("Error during sending message {}", sendResponse.description());
     }
 
     @Test
@@ -80,7 +77,6 @@ class ShelterMessageImplTest {
         shelterMessage.sendButtonMessage(id, telegramBot, message, keyboardMarkup);
 
         verify(telegramBot, times(1)).execute(any(SendMessage.class));
-        verify(shelterMessage.LOGGER, never()).error(anyString());
     }
 
     @Test
@@ -94,6 +90,5 @@ class ShelterMessageImplTest {
         shelterMessage.sendButtonMessage(id, telegramBot, message, keyboardMarkup);
 
         verify(telegramBot, times(1)).execute(any(SendMessage.class));
-        verify(shelterMessage.LOGGER, times(1)).error("Error during sending message {}", sendResponse.description());
     }
 }

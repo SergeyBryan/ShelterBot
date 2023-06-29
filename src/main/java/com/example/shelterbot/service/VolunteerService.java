@@ -5,6 +5,7 @@ import com.example.shelterbot.model.Cats;
 import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.Report;
 import com.example.shelterbot.model.Volunteer;
+import com.example.shelterbot.model.enums.PetType;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,5 +27,5 @@ public interface VolunteerService {
 
     Dogs addDogInShelter(Dogs dogs);
 
-    boolean addPetToOwner(long petId, String dogOrCat, long userId);
+    boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException;
 }

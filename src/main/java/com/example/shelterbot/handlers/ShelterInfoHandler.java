@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendPhoto;
-import lombok.ToString;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,6 @@ import java.nio.file.Path;
  */
 @Component
 @Order(5)
-@ToString
 public class ShelterInfoHandler extends AbstractHandler {
 
     public ShelterInfoHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
@@ -44,7 +42,7 @@ public class ShelterInfoHandler extends AbstractHandler {
         long chatId = update.callbackQuery().message().chat().id();
         InlineKeyboardMarkup back_menu = shelterMessage.keyboards(BACK_MENU);
         InlineKeyboardMarkup menu = shelterMessage.keyboards(INFORMATION,
-                SCHEDULE, PASS, SECURITY, PERSONAL_INFO, CALL_A_VOLUNTEER, BACK);
+                SCHEDULE, PASS, SECURITY, PUT_CONTACTS, CALL_A_VOLUNTEER, BACK);
         if (data != null) {
             switch (data) {
                 case "/" + BACK_MENU ->
@@ -59,7 +57,7 @@ public class ShelterInfoHandler extends AbstractHandler {
                         shelterMessage.sendButtonMessage(chatId, telegramBot, ShelterInfoEnum.PASS_TEXT.getText(), back_menu);
                 case "/" + SECURITY ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, ShelterInfoEnum.SECURITY_TEXT.getText(), back_menu);
-                case "/" + PERSONAL_INFO ->
+                case "/" + PUT_CONTACTS ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, ShelterInfoEnum.PERSONAL_INFO_TEXT.getText(), back_menu);
             }
         }

@@ -1,8 +1,13 @@
 package com.example.shelterbot.service.impl;
 
 import com.example.shelterbot.exceptions.NotFoundException;
+import com.example.shelterbot.model.Cats;
+import com.example.shelterbot.model.Dogs;
 import com.example.shelterbot.model.User;
+import com.example.shelterbot.model.enums.PetType;
 import com.example.shelterbot.repository.UserRepository;
+import com.example.shelterbot.service.CatsService;
+import com.example.shelterbot.service.DogsService;
 import com.example.shelterbot.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +21,20 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final DogsService dogRepository;
+    private final CatsService catRepository;
 
     /**
      * Конструктор класса.
+     *
      * @param userRepository репозиторий пользователей
+     * @param dogRepository
+     * @param catRepository
      */
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, DogsService dogRepository, CatsService catRepository) {
         this.userRepository = userRepository;
+        this.dogRepository = dogRepository;
+        this.catRepository = catRepository;
     }
 
     /**
@@ -84,20 +96,29 @@ public class UserServiceImpl implements UserService {
      * @return пользователь
      */
     @Override
-    public User getUserByChatId(String chatId) {
+    public User getUserByChatId(long chatId) {
         return userRepository.getUserByChatId(chatId);
     }
 
     /**
      * Добавление питомца к пользователю.
-     * @param petId идентификатор питомца
+     *
+     * @param petId    идентификатор питомца
      * @param dogOrCat тип питомца (собака или кошка)
-     * @param userId идентификатор пользователя
+     * @param userId   идентификатор пользователя
      * @return true, если операция выполнена успешно
      */
     @Override
-    public boolean addPetToOwner(long petId, String dogOrCat, String userId) {
-        userRepository.addPetToOwner(petId, dogOrCat, userId);
-        return true;
+    public boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException {
+        if (dogOrCat == PetType.DOG) {
+            Dogs dog = dogRepository.getById(petId);
+            userRepository.addDogToOwner(dog, userId);
+            return true;
+        } else if (dogOrCat == PetType.CAT) {
+            Cats cat = catRepository.getById(petId);
+            userRepository.addCatToOwner(cat, userId);
+            return true;
+        }
+        return false;
     }
 }

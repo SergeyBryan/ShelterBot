@@ -8,7 +8,7 @@ import java.util.List;
 public interface DogsService {
     Dogs save(Dogs dogs);
 
-    Dogs getById(int id) throws NotFoundException;
+    Dogs getById(long id) throws NotFoundException;
 
     List<Dogs> getAll();
 }
