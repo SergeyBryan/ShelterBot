@@ -33,4 +33,6 @@ public interface VolunteerService {
     List<Report> getAllUncheckedReports();
 
     void checkReport(long reportID);
+
+    Volunteer getVolunteerByChatId(long chatId);
 }

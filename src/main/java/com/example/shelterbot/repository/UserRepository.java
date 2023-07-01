@@ -36,5 +36,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     User getUserByChatId(long chatId);
 
+    @Transactional
     List<User> getAllByCatIsNotNullAndDogIsNotNull();
 }
