@@ -31,9 +31,11 @@ public class ShelterInfoHandler extends AbstractHandler {
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
             log.info("Processing appliesTo ShelterInfoHandler: {}", update.callbackQuery().data());
-            return ASSISTANCE_LIST.stream()
+            boolean result = ASSISTANCE_LIST.stream()
                     .map(s -> "/" + s)
                     .anyMatch(s -> s.equals(update.callbackQuery().data()));
+            log.info("Processing appliesTo ShelterInfoHandler: return " + result);
+            return result;
         }
         return false;
     }

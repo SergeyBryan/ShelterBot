@@ -43,17 +43,23 @@ public class ReportHandler extends AbstractHandler {
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
             log.info("Processing appliesTo ReportHandler: {}", update.callbackQuery().data());
-            return update
+            boolean result = update
                     .callbackQuery()
                     .data()
                     .equals("/" + PET_REPORT);
+            log.info("Processing appliesTo ReportHandler: return " + result);
+            return result;
 
         } else if (update.message() != null) {
             log.info("Processing appliesTo ReportHandler: {}", update.message());
             if (update.message().text() != null) {
-                return update.message().text().toLowerCase().startsWith("отчет");
+                boolean result = update.message().text().toLowerCase().startsWith("отчет");
+                log.info("Processing appliesTo ReportHandler: return " + result);
+                return result;
             }
-            return update.message().photo() != null;
+            boolean result = update.message().photo() != null;
+            log.info("Processing appliesTo ReportHandler: return " + result);
+            return result;
         }
         return false;
     }

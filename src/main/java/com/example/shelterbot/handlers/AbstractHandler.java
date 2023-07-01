@@ -55,7 +55,6 @@ public abstract class AbstractHandler implements TelegramHandler {
                                                                     RECOM_FROM_CYNOLOGIST,
                                                                     CYNOLOGIST_LIST,
                                                                     RESTRICTIONS,
-                                                                    PUT_CONTACTS,
                                                                     BACK_MENU);
 
 
