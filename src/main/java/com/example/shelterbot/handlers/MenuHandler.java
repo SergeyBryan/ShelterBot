@@ -46,8 +46,10 @@ public class MenuHandler extends AbstractHandler {
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
             log.info("Processing appliesTo MenuHandler: {}", update.callbackQuery().data());
-            return (update.callbackQuery().data().equals("/" + BACK)) ||
+            boolean result = (update.callbackQuery().data().equals("/" + BACK)) ||
                     (update.callbackQuery().data().equals("/" + CAT_SHELTER) || update.callbackQuery().data().equals("/" + DOG_SHELTER));
+            log.info("Processing appliesTo MenuHandler: return " + result);
+            return result;
         }
         return false;
     }

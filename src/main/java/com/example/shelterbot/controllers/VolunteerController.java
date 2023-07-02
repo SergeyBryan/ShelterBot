@@ -183,7 +183,7 @@ public class VolunteerController {
             })
     public ResponseEntity<String> addVolunteer(@RequestParam long userid) throws NotFoundException {
         volunteerService.addVolunteer(userid);
-        return ResponseEntity.ok("Пользователь успешно добвлен как пользователь ");
+        return ResponseEntity.ok("Пользователь успешно добвлен как волонтер ");
     }
 
 }

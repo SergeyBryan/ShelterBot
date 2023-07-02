@@ -43,18 +43,18 @@ class DogsServiceImplTest {
         Dogs dogs = new Dogs();
         dogs.setId(1L);
         Optional<Dogs> optionalDogs = Optional.of(dogs);
-        when(dogsRepository.findById(1)).thenReturn(optionalDogs);
-        Dogs foundDogs = dogsService.getById(1);
+        when(dogsRepository.findById(1L)).thenReturn(optionalDogs);
+        Dogs foundDogs = dogsService.getById(1L);
         Assertions.assertEquals(dogs, foundDogs);
-        verify(dogsRepository, times(1)).findById(1);
+        verify(dogsRepository, times(1)).findById(1L);
     }
 
     @Test
     void getByIdNotFoundExceptionTest() {
         Optional<Dogs> optionalDogs = Optional.empty();
-        when(dogsRepository.findById(1)).thenReturn(optionalDogs);
+        when(dogsRepository.findById(1L)).thenReturn(optionalDogs);
         Assertions.assertThrows(NotFoundException.class, () -> dogsService.getById(1));
-        verify(dogsRepository, times(1)).findById(1);
+        verify(dogsRepository, times(1)).findById(1L);
     }
 
     @Test

@@ -160,4 +160,9 @@ public class VolunteerServiceImpl implements VolunteerService {
         reportsService.checkReport(reportID);
     }
 
+    @Override
+    public Volunteer getVolunteerByChatId(long chatId) {
+        return volunteerRepository.getVolunteerByChatId(chatId);
+    }
+
 }

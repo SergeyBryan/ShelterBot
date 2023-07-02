@@ -41,23 +41,63 @@ public class InstructionHandler extends AbstractHandler {
             boolean ifSecondMenuSelection = INSTRUCTION_LIST.stream()
                     .map(s -> "/" + s)
                     .anyMatch(s -> s.equals(data));
-
-            selection.put(update.callbackQuery().from().id(), isFirstMenuSelection);
+            if (isFirstMenuSelection) {
+                selection.put(update.callbackQuery().from().id(), true);
+            } else if (ifSecondMenuSelection){
+                selection.put(update.callbackQuery().from().id(), false);
+            }
+            log.info("Processing appliesTo InstructionHandler: return true");
             return isFirstMenuSelection || ifSecondMenuSelection;
         }
+        log.info("Processing appliesTo InstructionHandler: return false");
         return false;
     }
 
     @Override
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();
-        long chatId = update.callbackQuery().message().chat().id();
+        long chatId = update.callbackQuery().from().id();
         boolean isFirstMenuSelection = selection.get(chatId);
 
         if (isFirstMenuSelection) {
             firstMenuSelection(chatId);
-        } else  {
+        } else {
             secondSelectionMenu(update, data, chatId);
+        }
+    }
+
+    private void firstMenuSelection(long chatId) {
+        PetType flag = menuHandler.flag.get(chatId);
+        if (flag == PetType.CAT) {
+            InlineKeyboardMarkup catMenu = shelterMessage.keyboards(
+                                                                    INSTRUCTION_MEETING,
+                                                                    DOC_LIST,
+                                                                    TRANSPORTATION,
+                                                                    HOUSE_RECOM_FOR_KITY,
+                                                                    HOUSE_RECOM_FOR_ADULT,
+                                                                    HOUSE_RECOM_FOR_INVALID,
+                                                                    RESTRICTIONS,
+                                                                    CALL_A_VOLUNTEER,
+                                                                    BACK);
+            shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", catMenu);
+        } else if (flag == PetType.DOG) {
+            InlineKeyboardMarkup dogMenu = shelterMessage.keyboards(
+                                                                    INSTRUCTION_MEETING,
+                                                                    DOC_LIST,
+                                                                    TRANSPORTATION,
+                                                                    HOUSE_RECOM_FOR_PUPPY,
+                                                                    HOUSE_RECOM_FOR_ADULT,
+                                                                    HOUSE_RECOM_FOR_INVALID,
+                                                                    RECOM_FROM_CYNOLOGIST,
+                                                                    CYNOLOGIST_LIST,
+                                                                    RESTRICTIONS,
+                                                                    CALL_A_VOLUNTEER,
+                                                                    BACK);
+
+            shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", dogMenu);
+        } else {
+            SendMessage sendMessage = new SendMessage(chatId, "Вы не выбрали приют, вернитесь в стартовое меню и выбирете приют");
+            telegramBot.execute(sendMessage);
         }
     }
 
@@ -93,12 +133,16 @@ public class InstructionHandler extends AbstractHandler {
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.DOC_LIST.getText(), backMenu);
                 case "/" + TRANSPORTATION ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.RECOMMENDATION_FOR_TRANSPORTATION.getText(), backMenu);
-                case "/" + HOUSE_RECOM_FOR_KITY ->
+                case "/" + HOUSE_RECOM_FOR_PUPPY ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_PUPPY.getText(), backMenu);
                 case "/" + HOUSE_RECOM_FOR_ADULT ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_ADULT.getText(), backMenu);
                 case "/" + HOUSE_RECOM_FOR_INVALID ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.HOUSE_RECOMMENDATION_FOR_INVALID.getText(), backMenu);
+                case "/" + RECOM_FROM_CYNOLOGIST ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.CYNOLOGIST_ADVICE.getText(), backMenu);
+                case "/" + CYNOLOGIST_LIST ->
+                        shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.CYNOLOGIST_LIST.getText(), backMenu);
                 case "/" + RESTRICTIONS ->
                         shelterMessage.sendButtonMessage(chatId, telegramBot, InstructionsForDogsText.RESTRICTIONS.getText(), backMenu);
                 case "/" + CALL_A_VOLUNTEER -> chatHandler.handleUpdate(update);
@@ -108,38 +152,5 @@ public class InstructionHandler extends AbstractHandler {
             SendMessage sendMessage = new SendMessage(chatId, "Вы не выбрали приют, вернитесь в стартовое меню и выбирете приют");
             telegramBot.execute(sendMessage);
         }
-    }
-
-    private void firstMenuSelection(long chatId) {
-        InlineKeyboardMarkup dogMenu = shelterMessage.keyboards(INSTRUCTION_MEETING,
-                                                                DOC_LIST,
-                                                                TRANSPORTATION,
-                                                                HOUSE_RECOM_FOR_PUPPY,
-                                                                HOUSE_RECOM_FOR_ADULT,
-                                                                HOUSE_RECOM_FOR_INVALID,
-                                                                RECOM_FROM_CYNOLOGIST,
-                                                                CYNOLOGIST_LIST,
-                                                                RESTRICTIONS,
-                                                                CALL_A_VOLUNTEER,
-                                                                BACK);
-        InlineKeyboardMarkup catMenu = shelterMessage.keyboards(INSTRUCTION_MEETING,
-                                                                DOC_LIST,
-                                                                TRANSPORTATION,
-                                                                HOUSE_RECOM_FOR_KITY,
-                                                                HOUSE_RECOM_FOR_ADULT,
-                                                                HOUSE_RECOM_FOR_INVALID,
-                                                                RESTRICTIONS,
-                                                                CALL_A_VOLUNTEER,
-                                                                BACK);
-        PetType flag = menuHandler.flag.get(chatId);
-        if (flag == PetType.CAT) {
-            shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", catMenu);
-        } else if (flag == PetType.DOG) {
-            shelterMessage.sendButtonMessage(chatId, telegramBot, "Здесь вы можете получить инструкции", dogMenu);
-        } else {
-            SendMessage sendMessage = new SendMessage(chatId, "Вы не выбрали приют, вернитесь в стартовое меню и выбирете приют");
-            telegramBot.execute(sendMessage);
-        }
-
     }
 }

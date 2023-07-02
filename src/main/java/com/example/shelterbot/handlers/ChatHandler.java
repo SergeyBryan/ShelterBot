@@ -61,7 +61,10 @@ public class ChatHandler extends DefaultHandler{
             isCallBackQueryEqualsVolunteer = update.callbackQuery().data().equals("/" + CALL_A_VOLUNTEER);
             log.info("Processing appliesTo ChatHandler: {}", update.callbackQuery().data());
         }
-        return isCallBackQueryEqualsVolunteer || !isReport ;
+        boolean result = isCallBackQueryEqualsVolunteer || !isReport;
+        log.info("Processing appliesTo ChatHandler: return " + result);
+
+        return isCallBackQueryEqualsVolunteer || !isReport;
     }
 
     /**
