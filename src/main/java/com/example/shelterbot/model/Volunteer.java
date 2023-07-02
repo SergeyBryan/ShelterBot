@@ -17,4 +17,10 @@ public class Volunteer {
     private String name;
     private Long chatId;
     private String phoneNum;
+
+    public Volunteer(String name, Long chatId, String phoneNum) {
+        this.name = name;
+        this.chatId = chatId;
+        this.phoneNum = phoneNum;
+    }
 }

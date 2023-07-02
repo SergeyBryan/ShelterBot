@@ -15,4 +15,8 @@ public interface ReportsService {
     Report getByUserId(Long id);
 
     String savePhoto(Message message);
+
+    List<Report> getAllUncheckedReports();
+
+    void checkReport(long reportID);
 }

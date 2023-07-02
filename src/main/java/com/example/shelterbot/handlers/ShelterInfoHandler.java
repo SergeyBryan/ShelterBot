@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendPhoto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.nio.file.Path;
  */
 @Component
 @Order(5)
+@Slf4j
 public class ShelterInfoHandler extends AbstractHandler {
 
     public ShelterInfoHandler(TelegramBot telegramBot, ShelterMessageImpl shelterMessage) {
@@ -28,9 +30,12 @@ public class ShelterInfoHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
-            return ASSISTANCE_LIST.stream()
+            log.info("Processing appliesTo ShelterInfoHandler: {}", update.callbackQuery().data());
+            boolean result = ASSISTANCE_LIST.stream()
                     .map(s -> "/" + s)
                     .anyMatch(s -> s.equals(update.callbackQuery().data()));
+            log.info("Processing appliesTo ShelterInfoHandler: return " + result);
+            return result;
         }
         return false;
     }

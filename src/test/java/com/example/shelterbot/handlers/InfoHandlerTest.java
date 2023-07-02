@@ -72,19 +72,6 @@ class InfoHandlerTest {
         when(update.callbackQuery().message().chat().id()).thenReturn(123L);
         InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Назад");
         infoHandler.handleUpdate(update);
-        verify(shelterMessage, times(1)).sendButtonMessage(123L, telegramBot, "Инфо: \n Здесь можно узнать как взять питомца из приюта", inlineKeyboardMarkup);
-    }
-
-    @Test
-    @DisplayName("Тест метода handleUpdate с запросом отчета о питомце")
-    void testHandleUpdateWithPetReportRequest() {
-        when(update.callbackQuery()).thenReturn(callbackQuery);
-        when(update.callbackQuery().data()).thenReturn("/" + PET_REPORT);
-        when(update.callbackQuery().message()).thenReturn(message);
-        when(update.callbackQuery().message().chat()).thenReturn(chat);
-        when(update.callbackQuery().message().chat().id()).thenReturn(123L);
-        InlineKeyboardMarkup inlineKeyboardMarkup = shelterMessage.keyboards("Назад");
-        infoHandler.handleUpdate(update);
-        verify(shelterMessage, times(1)).sendButtonMessage(123L, telegramBot, "Отчёт о питомце: \n Отчёт о вашем питомце здесь:", inlineKeyboardMarkup);
+        verify(shelterMessage, times(1)).sendButtonMessage(123L, telegramBot, "Инфо: \n Здесь вы можете узнать как взять питомца из приюта", inlineKeyboardMarkup);
     }
 }

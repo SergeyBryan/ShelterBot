@@ -1,10 +1,7 @@
 package com.example.shelterbot.service.impl;
 
 import com.example.shelterbot.exceptions.NotFoundException;
-import com.example.shelterbot.model.Cats;
-import com.example.shelterbot.model.Dogs;
-import com.example.shelterbot.model.Report;
-import com.example.shelterbot.model.Volunteer;
+import com.example.shelterbot.model.*;
 import com.example.shelterbot.model.enums.PetType;
 import com.example.shelterbot.repository.VolunteerRepository;
 import com.example.shelterbot.service.*;
@@ -143,6 +140,29 @@ public class VolunteerServiceImpl implements VolunteerService {
     public boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException {
         userService.addPetToOwner(petId, dogOrCat, userId);
         return true;
+    }
+
+    @Override
+    public void addVolunteer(long userid) throws NotFoundException {
+        User user = userService.getById(userid);
+        Volunteer volunteer = new Volunteer(user.getName(), user.getChatId(), user.getPhoneNum());
+        volunteerRepository.save(volunteer);
+        userService.deleteUser(userid);
+    }
+
+    @Override
+    public List<Report> getAllUncheckedReports() {
+        return reportsService.getAllUncheckedReports();
+    }
+
+    @Override
+    public void checkReport(long reportID) {
+        reportsService.checkReport(reportID);
+    }
+
+    @Override
+    public Volunteer getVolunteerByChatId(long chatId) {
+        return volunteerRepository.getVolunteerByChatId(chatId);
     }
 
 }

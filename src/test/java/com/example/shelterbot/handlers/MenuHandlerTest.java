@@ -95,7 +95,7 @@ class MenuHandlerTest {
 
         verify(shelterMessage, times(1)).sendButtonMessage(123L, telegramBot, "Выберите Ваш запрос в меню",
                 shelterMessage.keyboards(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER));
-        assertEquals(PetType.CAT, MenuHandler.flag.get(123L));
+        assertEquals(PetType.CAT, menuHandler.flag.get(123L));
     }
 
     @Test
@@ -116,7 +116,7 @@ class MenuHandlerTest {
 
         verify(shelterMessage, times(1)).sendButtonMessage(123L, telegramBot, "Выберите Ваш запрос в меню",
                 shelterMessage.keyboards(INFO, HOW_TO_TAKE_A_PET, PET_REPORT, CALL_A_VOLUNTEER));
-        assertEquals(PetType.DOG, MenuHandler.flag.get(123L));
+        assertEquals(PetType.DOG, menuHandler.flag.get(123L));
     }
 
 }

@@ -58,7 +58,8 @@ create table reports
     text          text,
     user_owner_id bigserial not null references users (id),
     cat_id        bigint,
-    dog_id        bigint
+    dog_id        bigint,
+    is_checked boolean not null default false
 );
 
 ALTER TABLE users

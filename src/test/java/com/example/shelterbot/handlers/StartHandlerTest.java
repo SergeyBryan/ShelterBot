@@ -2,6 +2,7 @@ package com.example.shelterbot.handlers;
 
 import com.example.shelterbot.message.ShelterMessageImpl;
 import com.example.shelterbot.service.UserService;
+import com.example.shelterbot.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
@@ -28,12 +29,14 @@ class StartHandlerTest {
     private ShelterMessageImpl shelterMessage;
     @Mock
     private UserService userService;
+    @Mock
+    private VolunteerService volunteerService;
     private StartHandler startHandler;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        startHandler = new StartHandler(userService, telegramBot, shelterMessage);
+        startHandler = new StartHandler(telegramBot, shelterMessage, userService,  volunteerService);
     }
 
     @Test

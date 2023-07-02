@@ -72,6 +72,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
      * @param update объект, представляющий входящее сообщение
      */
     private void handleUpdate(Update update) {
+        logger.info("Processing handleUpdate: {}", update);
         for (TelegramHandler handler : telegramHandlers) {
             if (handler.appliesTo(update)) {
                 handler.handleUpdate(update);

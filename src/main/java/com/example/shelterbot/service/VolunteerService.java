@@ -8,7 +8,6 @@ import com.example.shelterbot.model.Volunteer;
 import com.example.shelterbot.model.enums.PetType;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VolunteerService {
     Volunteer save(Volunteer volunteer);
@@ -28,4 +27,12 @@ public interface VolunteerService {
     Dogs addDogInShelter(Dogs dogs);
 
     boolean addPetToOwner(long petId, PetType dogOrCat, long userId) throws NotFoundException;
+
+    void addVolunteer(long userid) throws NotFoundException;
+
+    List<Report> getAllUncheckedReports();
+
+    void checkReport(long reportID);
+
+    Volunteer getVolunteerByChatId(long chatId);
 }

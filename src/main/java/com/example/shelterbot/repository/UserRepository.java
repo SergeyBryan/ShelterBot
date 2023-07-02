@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Repository
@@ -32,8 +33,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void addCatToOwner(@Param("cat") Cats cat,
                        @Param("id")long id);
 
-
-
     @Transactional
     User getUserByChatId(long chatId);
+
+    @Transactional
+    List<User> getAllByCatIsNotNullAndDogIsNotNull();
 }
