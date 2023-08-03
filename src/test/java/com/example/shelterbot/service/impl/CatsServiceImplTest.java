@@ -43,18 +43,18 @@ public class CatsServiceImplTest {
         Cats cats = new Cats();
         cats.setId(1L);
         Optional<Cats> optionalCats = Optional.of(cats);
-        when(catsRepository.findById(1)).thenReturn(optionalCats);
-        Cats foundCats = catsService.getById(1);
+        when(catsRepository.findById(1L)).thenReturn(optionalCats);
+        Cats foundCats = catsService.getById(1L);
         Assertions.assertEquals(cats, foundCats);
-        verify(catsRepository, times(1)).findById(1);
+        verify(catsRepository, times(1)).findById(1L);
     }
 
     @Test
     void getByIdNotFoundExceptionTest() {
         Optional<Cats> optionalCats = Optional.empty();
-        when(catsRepository.findById(1)).thenReturn(optionalCats);
+        when(catsRepository.findById(1L)).thenReturn(optionalCats);
         Assertions.assertThrows(NotFoundException.class, () -> catsService.getById(1));
-        verify(catsRepository, times(1)).findById(1);
+        verify(catsRepository, times(1)).findById(1L);
     }
 
     @Test

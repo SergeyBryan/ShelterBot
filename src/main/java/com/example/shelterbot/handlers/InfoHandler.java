@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(3)
+@Slf4j
 public class InfoHandler extends AbstractHandler {
 
 
@@ -47,7 +49,10 @@ public class InfoHandler extends AbstractHandler {
     @Override
     public boolean appliesTo(Update update) {
         if (update.callbackQuery() != null) {
-            return update.callbackQuery().data().equals("/" + INFO);
+            log.info("Processing appliesTo InfoHandler: {}", update.callbackQuery().data());
+            boolean result = update.callbackQuery().data().equals("/" + INFO);
+            log.info("Processing appliesTo InfoHandler: return " + result);
+            return result;
         }
         return false;
     }
@@ -62,17 +67,11 @@ public class InfoHandler extends AbstractHandler {
     public void handleUpdate(Update update) {
        String data = update.callbackQuery().data();
         long chatId = update.callbackQuery().message().chat().id();
-
-        InlineKeyboardMarkup back = shelterMessage.keyboards(BACK);
         InlineKeyboardMarkup menu = shelterMessage.keyboards(INFORMATION,
                 SCHEDULE, PASS, SECURITY, PUT_CONTACTS, CALL_A_VOLUNTEER, BACK);
         if (data != null) {
             switch (data) {
                 case "/" + INFO -> shelterMessage.sendButtonMessage(chatId, telegramBot, INFO_TEXT, menu);
-//                case "/" + HOW_TO_TAKE_A_PET ->
-//                        shelterMessage.sendButtonMessage(chatId, telegramBot, HOW_TO_TAKE_A_PET_TEXT, back);
-//                case "/" + PET_REPORT -> shelterMessage.sendButtonMessage(chatId, telegramBot, PET_REPORT_TEXT, back);
-//                case "/" + CALL_A_VOLUNTEER -> shelterMessage.sendButtonMessage(chatId, telegramBot, "Волонтёр", back);
                 case "/" + BACK -> menuHandler.handleUpdate(update);
             }
         }
